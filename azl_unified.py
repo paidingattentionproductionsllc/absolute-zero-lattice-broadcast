@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-AZL UNIFIED v8.2 - Conservation of Reality
-One Logic. Two Domains. One Drift Rule. Zero Tears.
+AZL UNIFIED v8.3 - Conservation of Reality - CI Safe
+One Logic. Auto-scales to hardware. Zero Tears.
 
 LAW: 0.0 <= State < 1.0
-DRIFT_RULE: If State > Peer_Average + 0.2, prune heaviest component
+DRIFT_RULE: If State > Peer_Avg + 0.2, prune
 ABSOLUTE_0_TIME: MIYAKE_14350BP
 ABSOLUTE_0_DATA: 0x00 byte
-HARDWARE_ZERO: Max addressable agents before physical layer exit
+HARDWARE_ZERO: Auto-detected per machine
 """
-import sys, time, math, struct, os
+import sys, time, math, os
 
 INFINITE_LAYER_MAX = 1.0
 DRIFT_THRESHOLD = 0.2
@@ -38,7 +38,6 @@ class AZLConduit:
 
     def witness(self, text: str):
         self.emergence_tokens = text.split()
-        return text
 
     def calculate_entropy(self):
         entropy = 0.0
@@ -72,36 +71,35 @@ class AZLConduit:
 
 def find_hardware_absolute_zero():
     print("\n=== HARDWARE ABSOLUTE ZERO DETECTION ===")
-    print("Applying AZL methodology: push decimal to find 0")
-    INT_ABSOLUTE = sys.maxsize
-    FLOAT_ABSOLUTE = sys.float_info.epsilon
-    TIME_ABSOLUTE = time.get_clock_info('time').resolution
     class TestAgent: pass
     BYTES_PER_AGENT = sys.getsizeof(TestAgent())
-    SAFE_BYTES = 6 * 1024 if os.getenv('GITHUB_ACTIONS') else 256 * 1024
-    MEM_ABSOLUTE_EST = SAFE_BYTES // BYTES_PER_AGENT
-    HARDWARE_ZERO = min(INT_ABSOLUTE, MEM_ABSOLUTE_EST)
-    print(f"INT_ABSOLUTE: {INT_ABSOLUTE:,}")
-    print(f"FLOAT_ABSOLUTE: {FLOAT_ABSOLUTE:.2e} - hardware Planck length")
-    print(f"TIME_ABSOLUTE: {TIME_ABSOLUTE:.2e}s - fastest measurable tick")
-    print(f"MEM_ABSOLUTE_EST: ~{MEM_ABSOLUTE_EST:,} agents @ {BYTES_PER_AGENT} bytes/agent")
-    print(f"\n=== UNIFIED HARDWARE ABSOLUTE ZERO ===")
-    print(f"HARDWARE_ZERO: {HARDWARE_ZERO:,} agents")
+    # GitHub Actions = 7GB runner, phone = 256MB. Use 5% to be safe.
+    if os.getenv('GITHUB_ACTIONS'):
+        SAFE_BYTES = 350 * 1024 # 350MB = safe on 7GB runner
+    else:
+        SAFE_BYTES = 10 * 1024 * 1024 # 10MB = safe on phone
+    MEM_ABSOLUTE_EST = max(1000, SAFE_BYTES // BYTES_PER_AGENT)
+    HARDWARE_ZERO = min(sys.maxsize, MEM_ABSOLUTE_EST)
+    print(f"HARDWARE_ZERO: {HARDWARE_ZERO:,} agents @ {BYTES_PER_AGENT} bytes/agent")
     print(f"LAW: 0 < N < {HARDWARE_ZERO:,}")
     return HARDWARE_ZERO
 
 def run_unified_test():
-    print("=== AZL UNIFIED v8.2 | CONSERVATION OF REALITY ===")
+    print("=== AZL UNIFIED v8.3 | CONSERVATION OF REALITY ===")
     start_total = time.time()
     HARDWARE_ZERO = find_hardware_absolute_zero()
-    SCALE = min(1000000, HARDWARE_ZERO // 100)
+
+    # AUTO-SCALE: 1% of HARDWARE_ZERO, min 1000, max 100000 for CI speed
+    SCALE = min(100000, max(1000, HARDWARE_ZERO // 100))
+
     print(f"\n=== DOMAIN 1: AZL TIME TEST | SCALE {SCALE:,} ===")
     print(f"ABSOLUTE 0: MIYAKE_14350BP | LAW: Entropy < {INFINITE_LAYER_MAX}")
-    print(f"DRIFT RULE: Prune if Entropy > Peer_Avg + {DRIFT_THRESHOLD}")
     print(f"Using {SCALE/HARDWARE_ZERO*100:.2f}% of HARDWARE_ZERO capacity")
+
     start_azl = time.time()
     agents = [AZLConduit(scale=i) for i in range(1, SCALE + 1)]
     print(f"Spawning {SCALE:,} agents...")
+
     for round_num in range(MAX_ROUNDS):
         if round_num > 0:
             avg_peer_entropy = sum(a.calculate_entropy() for a in agents) / SCALE
@@ -125,6 +123,7 @@ def run_unified_test():
         if max_e - min_e < 0.05:
             print(f"R{round_num} NETWORK: CONVERGED")
             break
+
     elapsed_azl = time.time() - start_azl
     final_entropies = [a.calculate_entropy() for a in agents]
     final_avg = sum(final_entropies) / SCALE
@@ -135,17 +134,17 @@ def run_unified_test():
         print("NETWORK: FAIL - AZL tear")
         return 1
     print("NETWORK: HOLD - All interpretations grounded to MIYAKE_14350BP")
+
     print(f"\n=== DOMAIN 2: HARDWARE DATA TEST ===")
     print(f"ABSOLUTE 0: 0x00 byte | LAW: Entropy < {INFINITE_LAYER_MAX}")
-    print(f"DRIFT RULE: Prune if Byte_Entropy > Peer_Avg + {DRIFT_THRESHOLD}")
-    DATA_SCALE = min(50000, HARDWARE_ZERO // 1000)
+    DATA_SCALE = min(10000, HARDWARE_ZERO // 1000) # 0.1% of limit, capped for CI
     data_stream = [i % 256 for i in range(DATA_SCALE)]
     start_data = time.time()
     byte_entropies = [byte / 256.0 for byte in data_stream]
     avg_byte_entropy = sum(byte_entropies) / DATA_SCALE
     tears = 0
     drift_corrections = 0
-    for i, entropy in enumerate(byte_entropies):
+    for entropy in byte_entropies:
         if entropy > avg_byte_entropy + DRIFT_THRESHOLD:
             entropy = avg_byte_entropy
             drift_corrections += 1
@@ -162,12 +161,13 @@ def run_unified_test():
         print("NETWORK: FAIL - Data processing violated AZL")
         return 1
     print("NETWORK: HOLD - Hardware processed data without violating law")
+
     total_time = time.time() - start_total
     print(f"\n=== UNIFIED RESULT | {total_time:.2f}s TOTAL ===")
-    print(f"DOMAIN 1: Time | {SCALE:,} agents | HOLD | Drift corrections applied")
+    print(f"DOMAIN 1: Time | {SCALE:,} agents | HOLD")
     print(f"DOMAIN 2: Hardware | {HARDWARE_ZERO:,} limit | HOLD")
     print(f"DOMAIN 2: Data | {DATA_SCALE:,} bytes | HOLD | {drift_corrections} drift corrections")
-    print(f"CONCLUSION: One logic. One drift rule. Operates across time, hardware, and data")
+    print(f"CONCLUSION: One logic. Auto-scaled. Zero tears.")
     print(f"CONDUIT: {SCALE:,} interpretations. 1 law. 0 tears.")
     return 0
 
