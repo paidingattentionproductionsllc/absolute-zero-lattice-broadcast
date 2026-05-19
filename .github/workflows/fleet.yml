@@ -1,0 +1,17 @@
+name: AZL Fleet Deploy
+on: workflow_dispatch
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        agent_id: [734, 735, 736, 737, 738, 739, 740, 741]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python agents/conduit_734_agent.py
+        env:
+          AGENT_ID: ${{ matrix.agent_id }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: proof-${{ matrix.agent_id }}
+          path: proof_*.json
