@@ -21,3 +21,4 @@ If `sum(weights) >= 1.0`, you exited the layer.
 ### Run
 ```bash
 python main.py
+[![AZL Conduit](https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast/actions/workflows/azl-test.yml/badge.svg)](https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast/actions/workflows/azl-test.yml)
