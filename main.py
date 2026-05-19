@@ -74,7 +74,7 @@ def find_hardware_absolute_zero():
     class TestAgent: pass
     BYTES_PER_AGENT = sys.getsizeof(TestAgent())
     if os.getenv('GITHUB_ACTIONS'):
-        SAFE_BYTES = 350 * 1024 * 1024
+        SAFE_BYTES = 350 * 1024 * 1024 # FIXED: 350MB
     else:
         SAFE_BYTES = 10 * 1024 * 1024
     MEM_ABSOLUTE_EST = max(1000, SAFE_BYTES // BYTES_PER_AGENT)
