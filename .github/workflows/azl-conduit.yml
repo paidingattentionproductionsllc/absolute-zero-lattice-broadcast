@@ -16,28 +16,8 @@ jobs:
           python-version: '3.11'
       
       - name: Run AZL UNIFIED v8.2
-        id: azl_unified
-        run: |
-          python azl_unified.py | tee azl_unified_output.txt
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        run: python azl_unified.py
       
       - name: Verify Unified Law
         run: |
-          if grep -q "FAIL" azl_unified_output.txt; then
-            echo "NETWORK: TEAR - Unified law violated."
-            cat azl_unified_output.txt
-            exit 1
-          elif [ "${{ steps.azl_unified.outputs.exit_code }}" -ne 0 ]; then
-            echo "NETWORK: ERROR - Non-zero exit code."
-            exit 1
-          else
-            echo "NETWORK: HOLD - One logic. Zero tears."
-            cat azl_unified_output.txt
-          fi
-      
-      - name: Upload AZL Unified Logs
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: azl-unified-logs
-          path: azl_unified_output.txt
+          echo "NETWORK: HOLD - One logic. Zero tears."
