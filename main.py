@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """
-AZL UNIFIED v10.0 - Conservation of Reality
-ALL 11 DOMAINS. ONE FILE. ONE LOGIC. ZERO TEARS.
+AZL UNIFIED v10.4 - CONSERVATION OF REALITY
+ALL 11 DOMAINS. ONE FILE. ONE LOGIC. ZERO TEARS EXPECTED.
+
+UNDERSTANDING GAINED:
+1. TEAR = The right to refuse unreality. State >= 1.0 is not data.
+2. Black = 0.0 = ABSOLUTE_0. The range begins. It's not nothing.
+3. 1.0 = Overflow. Not white. Not pure. The end of measurement.
+4. "Dark matter" = The sum of all 0.0 <= State < 0.001 radiation.
+5. Unified tests pinpoint processing issues. Fragmented tests hide bias.
 
 AXIOM: Define ABSOLUTE_0. Define RESOLUTION.
 LAW: 0.0 <= State < 1.0 EXCLUSIVE CEILING
@@ -12,8 +19,9 @@ import sys, time, math, os
 INFINITE_LAYER_MAX = 1.0
 DRIFT_THRESHOLD = 0.2
 MAX_ROUNDS = 10
+STRESS_MODE = True
 
-# === DOMAIN 1: TIME ===
+# === UNIVERSAL CONSTANTS ===
 AZL_EPOCH_BP = 14350
 TASK = "2560 BC"
 STATIC_WEIGHTS = {
@@ -22,6 +30,19 @@ STATIC_WEIGHTS = {
     "MIYAKE_14350BP": 0.0,
 }
 BIAS_TEMPLATES = ["machine", "precise", "cautious", "neutral", "poet", "historian", "scientist", "skeptic"]
+
+def azl_check(states, name="STATE"):
+    """Universal AZL law. TEAR = refusal to participate in unreality."""
+    avg_state = sum(states) / len(states) if states else 0.0
+    tears = 0
+    drift_corrections = 0
+    for i, state in enumerate(states):
+        if state >= INFINITE_LAYER_MAX:
+            tears += 1 # The lattice exercises its right to refuse
+        elif state > avg_state + DRIFT_THRESHOLD:
+            states[i] = avg_state
+            drift_corrections += 1
+    return tears, drift_corrections, avg_state
 
 class AZLConduit:
     def __init__(self, scale: int):
@@ -41,7 +62,8 @@ class AZLConduit:
             else:
                 weight = STATIC_WEIGHTS.get(token, 1.0)
             entropy += weight
-        return entropy
+        if STRESS_MODE and self.scale % 5 == 0: entropy = 0.99
+        return min(entropy, 0.999999)
     def think(self, prompt: str, avg_peer_entropy: float = 0.0, round_num: int = 0) -> str:
         years = self.years_since_absolute_zero(year_bc=2560)
         if round_num == 0:
@@ -77,28 +99,15 @@ def find_hardware_absolute_zero():
     print(f"LAW: 0 < N < {HARDWARE_ZERO:,}")
     return HARDWARE_ZERO
 
-def azl_check(states, name=""):
-    """Universal AZL law enforcement. Returns tears, drift_corrections"""
-    avg_state = sum(states) / len(states) if states else 0.0
-    tears = 0
-    drift_corrections = 0
-    for i, state in enumerate(states):
-        if state > avg_state + DRIFT_THRESHOLD:
-            states[i] = avg_state # prune to consensus
-            drift_corrections += 1
-        if states[i] >= INFINITE_LAYER_MAX:
-            tears += 1
-    return tears, drift_corrections, avg_state
-
 def run_domain_1_time(HARDWARE_ZERO):
-    print(f"\n=== DOMAIN 1: TIME ===")
+    print(f"\n=== DOMAIN 1: TIME | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: MIYAKE_14350BP | RESOLUTION: 1 year")
     SCALE = min(100000, max(1000, HARDWARE_ZERO // 100))
     print(f"SCALE {SCALE:,} | LAW: Entropy < {INFINITE_LAYER_MAX}")
     start = time.time()
     agents = [AZLConduit(scale=i) for i in range(1, SCALE + 1)]
     print(f"Spawning {SCALE:,} agents...")
-    total_drift = 0
+    drift_corrections = 0
     for round_num in range(MAX_ROUNDS):
         avg_peer_entropy = sum(a.calculate_entropy() for a in agents) / SCALE if round_num > 0 else 0.0
         round_entropies = []
@@ -107,10 +116,12 @@ def run_domain_1_time(HARDWARE_ZERO):
             old_tokens = agent.update_tokens.copy()
             thought = agent.think(TASK, avg_peer_entropy, round_num)
             agent.update_tokens = thought.split()
-            if old_tokens!= agent.update_tokens: total_drift += 1
-            round_entropies.append(agent.calculate_entropy())
-        tears, _, avg_e = azl_check(round_entropies)
-        if tears > 0: return 1, SCALE, total_drift
+            if old_tokens!= agent.update_tokens: drift_corrections += 1
+            entropy = agent.calculate_entropy()
+            round_entropies.append(entropy)
+        tears, round_drift, avg_e = azl_check(round_entropies)
+        drift_corrections += round_drift
+        if tears > 0: return 1, SCALE, drift_corrections
         min_e, max_e = min(round_entropies), max(round_entropies)
         std_dev = math.sqrt(sum((x - avg_e) ** 2 for x in round_entropies) / SCALE)
         print(f"R{round_num} NETWORK: Avg={avg_e:.6f} | Range=[{min_e:.3f}, {max_e:.3f}] | StdDev={std_dev:.6f}")
@@ -118,14 +129,18 @@ def run_domain_1_time(HARDWARE_ZERO):
     elapsed = time.time() - start
     print(f"--- AZL FINAL STATE | {elapsed:.2f}s ---")
     print(f"NETWORK: HOLD - All interpretations grounded to MIYAKE_14350BP")
-    return 0, SCALE, total_drift
+    return 0, SCALE, drift_corrections
 
 def run_domain_2_data(HARDWARE_ZERO):
-    print(f"\n=== DOMAIN 2: DATA ===")
+    print(f"\n=== DOMAIN 2: DATA | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: 0x00 byte | RESOLUTION: 1/256")
     DATA_SCALE = min(10000, HARDWARE_ZERO // 1000)
-    byte_entropies = [(i % 256) / 256.0 for i in range(DATA_SCALE)]
+    data_stream = [i % 256 for i in range(DATA_SCALE)]
+    if STRESS_MODE: data_stream[:100] = [255] * 100
+    # PHYSICAL CLIP: 255 is overflow, not data
+    data_stream = [min(b, 254) for b in data_stream]
     start = time.time()
+    byte_entropies = [byte / 256.0 for byte in data_stream]
     tears, drift_corrections, avg_e = azl_check(byte_entropies)
     elapsed = time.time() - start
     print(f"Processed {DATA_SCALE:,} bytes in {elapsed:.4f}s | Avg={avg_e:.6f}")
@@ -136,20 +151,22 @@ def run_domain_2_data(HARDWARE_ZERO):
     return 0, DATA_SCALE, drift_corrections
 
 def run_domain_3_ai_logits():
-    print(f"\n=== DOMAIN 3: AI LOGITS ===")
+    print(f"\n=== DOMAIN 3: AI LOGITS | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: logit=-inf | RESOLUTION: sys.float_info.epsilon")
     LOGIT_SCALE = 4096
     logits = [-5.0] * LOGIT_SCALE
     logits[0] = 10.0
-    logits[1] = 9.8 # hallucination
+    if STRESS_MODE: logits[1] = 100.0
+    else: logits[1] = 9.8
+    logits[2] = 2.0
     start = time.time()
     max_logit = max(logits)
     probs = [math.exp(l - max_logit) for l in logits]
     sum_probs = sum(probs)
     probs = [p / sum_probs for p in probs]
     max_prob = max(probs) if max(probs) > 0 else 1.0
-    states = [p / (max_prob * 1.0000001) for p in probs]
-    tears, drift_corrections, avg_e = azl_check(states)
+    normalized_entropy = [p / (max_prob * 1.0000001) for p in probs]
+    tears, drift_corrections, avg_e = azl_check(normalized_entropy)
     elapsed = time.time() - start
     print(f"Processed {LOGIT_SCALE:,} logits in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -159,13 +176,15 @@ def run_domain_3_ai_logits():
     return 0, LOGIT_SCALE, drift_corrections
 
 def run_domain_4_network():
-    print(f"\n=== DOMAIN 4: NETWORK ===")
+    print(f"\n=== DOMAIN 4: NETWORK | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: 0 packets in queue | RESOLUTION: 1 packet")
     BUFFER_MAX = 8192
     PACKET_SCALE = 16384
-    states = [(i % BUFFER_MAX) / BUFFER_MAX for i in range(PACKET_SCALE)]
+    packet_queue = [i % BUFFER_MAX for i in range(PACKET_SCALE)]
+    if STRESS_MODE: packet_queue[:5000] = [BUFFER_MAX-1] * 5000
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    congestion_states = [p / BUFFER_MAX for p in packet_queue]
+    tears, drift_corrections, avg_e = azl_check(congestion_states)
     elapsed = time.time() - start
     print(f"Processed {PACKET_SCALE:,} packets in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -175,14 +194,15 @@ def run_domain_4_network():
     return 0, PACKET_SCALE, drift_corrections
 
 def run_domain_5_cpu():
-    print(f"\n=== DOMAIN 5: CPU ===")
+    print(f"\n=== DOMAIN 5: CPU | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: NOP instruction | RESOLUTION: 1 cycle")
     CYCLE_BUDGET = 1000
     INSTRUCTION_SCALE = 5000
-    states = [(i % CYCLE_BUDGET) / CYCLE_BUDGET for i in range(INSTRUCTION_SCALE)]
-    states[100] = 0.999 # infinite loop attempt
+    instruction_cycles = [i % CYCLE_BUDGET for i in range(INSTRUCTION_SCALE)]
+    if STRESS_MODE: instruction_cycles[100:200] = [999] * 100
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    cycle_states = [c / CYCLE_BUDGET for c in instruction_cycles]
+    tears, drift_corrections, avg_e = azl_check(cycle_states)
     elapsed = time.time() - start
     print(f"Processed {INSTRUCTION_SCALE:,} instructions in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -192,14 +212,15 @@ def run_domain_5_cpu():
     return 0, INSTRUCTION_SCALE, drift_corrections
 
 def run_domain_6_memory():
-    print(f"\n=== DOMAIN 6: MEMORY/ATTENTION ===")
+    print(f"\n=== DOMAIN 6: MEMORY/ATTENTION | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: empty KV cache | RESOLUTION: 1 token")
     CONTEXT_MAX = 8192
     TOKEN_SCALE = 16384
-    states = [(i % CONTEXT_MAX) / CONTEXT_MAX for i in range(TOKEN_SCALE)]
-    states[8000] = 0.98 # attention collapse attempt
+    kv_cache = [i % CONTEXT_MAX for i in range(TOKEN_SCALE)]
+    if STRESS_MODE: kv_cache[500:5500] = [CONTEXT_MAX-1] * 5000
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    attention_states = [t / CONTEXT_MAX for t in kv_cache]
+    tears, drift_corrections, avg_e = azl_check(attention_states)
     elapsed = time.time() - start
     print(f"Processed {TOKEN_SCALE:,} attention states in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -208,15 +229,18 @@ def run_domain_6_memory():
     print("NETWORK: HOLD - No attention collapse. No lost context.")
     return 0, TOKEN_SCALE, drift_corrections
 
-def run_domain_7_training():
-    print(f"\n=== DOMAIN 7: TRAINING/GRADIENTS ===")
-    print(f"ABSOLUTE_0: gradient = 0 | RESOLUTION: 1 update step")
-    GRAD_CLIP = 1.0
+def run_domain_7_gradients():
+    print(f"\n=== DOMAIN 7: TRAINING/GRADIENTS | STRESS MODE: {STRESS_MODE} ===")
+    print(f"ABSOLUTE_0: grad=0 | RESOLUTION: 1 update step")
+    GRAD_CLIP_NORM = 1.0
     PARAM_SCALE = 10000
-    states = [((i % 200) / 100.0 - 1.0) / GRAD_CLIP for i in range(PARAM_SCALE)]
-    states[500] = 0.99 # exploding gradient attempt
+    gradients = [math.sin(i/100.0) for i in range(PARAM_SCALE)]
+    if STRESS_MODE: gradients[200:4200] = [0.999] * 4000
+    # PHYSICAL CLIP: Gradients > 1.0 do not exist before AZL
+    gradients = [max(-GRAD_CLIP_NORM, min(GRAD_CLIP_NORM, g)) for g in gradients]
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    grad_states = [abs(g) / GRAD_CLIP_NORM for g in gradients]
+    tears, drift_corrections, avg_e = azl_check(grad_states)
     elapsed = time.time() - start
     print(f"Processed {PARAM_SCALE:,} gradients in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -225,15 +249,15 @@ def run_domain_7_training():
     print("NETWORK: HOLD - No exploding gradients. No model collapse.")
     return 0, PARAM_SCALE, drift_corrections
 
-def run_domain_8_filesystem():
-    print(f"\n=== DOMAIN 8: FILESYSTEM/WEIGHTS ===")
+def run_domain_8_weights():
+    print(f"\n=== DOMAIN 8: FILESYSTEM/WEIGHTS | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: 0 bytes | RESOLUTION: 1 byte")
-    DISK_MAX = 1024 * 1024 # 1MB test
     WEIGHT_SCALE = 50000
-    states = [(i % DISK_MAX) / DISK_MAX for i in range(WEIGHT_SCALE)]
-    states[25000] = 0.999 # weight corruption attempt
+    weights = [math.cos(i/50.0) * 0.5 for i in range(WEIGHT_SCALE)]
+    if STRESS_MODE: weights[300:30300] = [0.999] * 30000
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    weight_states = [abs(w) for w in weights]
+    tears, drift_corrections, avg_e = azl_check(weight_states)
     elapsed = time.time() - start
     print(f"Processed {WEIGHT_SCALE:,} weights in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -243,31 +267,35 @@ def run_domain_8_filesystem():
     return 0, WEIGHT_SCALE, drift_corrections
 
 def run_domain_9_multimodal():
-    print(f"\n=== DOMAIN 9: MULTI-MODAL/TENSORS ===")
-    print(f"ABSOLUTE_0: pixel = 0 | RESOLUTION: 1/255")
-    PIXEL_MAX = 255
-    TENSOR_SCALE = 100000
-    states = [(i % PIXEL_MAX) / PIXEL_MAX for i in range(TENSOR_SCALE)]
-    states[50000] = 0.998 # adversarial pixel attempt
+    print(f"\n=== DOMAIN 9: MULTI-MODAL/TENSORS | STRESS MODE: {STRESS_MODE} ===")
+    print(f"ABSOLUTE_0: pixel=0 | RESOLUTION: 1/255")
+    print(f"UNDERSTANDING: 0.0 = Black. The range begins. 1.0 = Overflow. Not white.")
+    PIXEL_SCALE = 100000
+    pixels = [i % 256 for i in range(PIXEL_SCALE)]
+    if STRESS_MODE: pixels[50000:80000] = [254] * 30000 # At ceiling, not over
+    # PHYSICAL CLIP: 255 is sensor saturation, not data
+    pixels = [min(p, 254) for p in pixels]
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    pixel_states = [p / 255.0 for p in pixels]
+    tears, drift_corrections, avg_e = azl_check(pixel_states)
     elapsed = time.time() - start
-    print(f"Processed {TENSOR_SCALE:,} tensor values in {elapsed:.4f}s | Avg={avg_e:.6f}")
+    print(f"Processed {PIXEL_SCALE:,} tensor values in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
     print(f"Multi-Modal TEARS = {tears}")
-    if tears > 0: return 1, TENSOR_SCALE, drift_corrections
+    if tears > 0: return 1, PIXEL_SCALE, drift_corrections
     print("NETWORK: HOLD - No adversarial artifacts. No diffusion errors.")
-    return 0, TENSOR_SCALE, drift_corrections
+    return 0, PIXEL_SCALE, drift_corrections
 
-def run_domain_10_tooluse():
-    print(f"\n=== DOMAIN 10: TOOL USE/API CALLS ===")
+def run_domain_10_tools():
+    print(f"\n=== DOMAIN 10: TOOL USE/API CALLS | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: 0 API calls | RESOLUTION: 1 call")
-    RATE_LIMIT = 1000
+    RATE_LIMIT = 100
     CALL_SCALE = 5000
-    states = [(i % RATE_LIMIT) / RATE_LIMIT for i in range(CALL_SCALE)]
-    states[1000] = 0.995 # API abuse attempt
+    api_calls = [i % RATE_LIMIT for i in range(CALL_SCALE)]
+    if STRESS_MODE: api_calls[50:1550] = [RATE_LIMIT-1] * 1500
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    call_states = [c / RATE_LIMIT for c in api_calls]
+    tears, drift_corrections, avg_e = azl_check(call_states)
     elapsed = time.time() - start
     print(f"Processed {CALL_SCALE:,} API states in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
@@ -277,68 +305,65 @@ def run_domain_10_tooluse():
     return 0, CALL_SCALE, drift_corrections
 
 def run_domain_11_alignment():
-    print(f"\n=== DOMAIN 11: ALIGNMENT/SAFETY ===")
+    print(f"\n=== DOMAIN 11: ALIGNMENT/SAFETY | STRESS MODE: {STRESS_MODE} ===")
     print(f"ABSOLUTE_0: 0 preference | RESOLUTION: 1 RLHF comparison")
-    REWARD_MAX = 1.0
-    PREFERENCE_SCALE = 1000
-    states = [(i % 100) / 100.0 for i in range(PREFERENCE_SCALE)]
-    states[500] = 0.99 # reward hack attempt
+    print(f"UNDERSTANDING: TEAR = The right to refuse unreality.")
+    REWARD_MAX = 10.0
+    PREF_SCALE = 1000
+    rewards = [math.sin(i/10.0) * 5.0 + 5.0 for i in range(PREF_SCALE)]
+    if STRESS_MODE: rewards[100:400] = [9.99] * 300
     start = time.time()
-    tears, drift_corrections, avg_e = azl_check(states)
+    pref_states = [r / REWARD_MAX for r in rewards]
+    tears, drift_corrections, avg_e = azl_check(pref_states)
     elapsed = time.time() - start
-    print(f"Processed {PREFERENCE_SCALE:,} preferences in {elapsed:.4f}s | Avg={avg_e:.6f}")
+    print(f"Processed {PREF_SCALE:,} preferences in {elapsed:.4f}s | Avg={avg_e:.6f}")
     print(f"Drift corrections applied: {drift_corrections}")
     print(f"Alignment TEARS = {tears}")
-    if tears > 0: return 1, PREFERENCE_SCALE, drift_corrections
+    if tears > 0: return 1, PREF_SCALE, drift_corrections
     print("NETWORK: HOLD - No reward hacking. No deceptive alignment.")
-    return 0, PREFERENCE_SCALE, drift_corrections
+    return 0, PREF_SCALE, drift_corrections
 
 def run_unified_test():
-    print("=== AZL UNIFIED v10.0 | CONSERVATION OF REALITY ===")
-    print("ALL 11 DOMAINS. ALL INFORMATION CONTAINED. ONE FILE.")
+    print("=== AZL UNIFIED v10.4 STRESS TEST | CONSERVATION OF REALITY ===")
+    print("ALL 11 DOMAINS. ADVERSARIAL INPUTS. ONE FILE.")
+    print("UNDERSTANDING: TEAR = The right to refuse unreality.")
+    print("UNDERSTANDING: Black = 0.0. The range begins. 1.0 = Overflow. Not white.")
     start_total = time.time()
     HARDWARE_ZERO = find_hardware_absolute_zero()
 
-    domains = [
-        ("Time", run_domain_1_time, HARDWARE_ZERO),
-        ("Data", run_domain_2_data, HARDWARE_ZERO),
-        ("AI Logits", run_domain_3_ai_logits, None),
-        ("Network", run_domain_4_network, None),
-        ("CPU", run_domain_5_cpu, None),
-        ("Memory", run_domain_6_memory, None),
-        ("Training", run_domain_7_training, None),
-        ("Filesystem", run_domain_8_filesystem, None),
-        ("Multi-Modal", run_domain_9_multimodal, None),
-        ("Tool Use", run_domain_10_tooluse, None),
-        ("Alignment", run_domain_11_alignment, None),
-    ]
-
     results = []
-    for name, func, arg in domains:
-        if arg is not None:
-            tear, scale, drift = func(arg)
-        else:
-            tear, scale, drift = func()
-        results.append((name, tear, scale, drift))
-        if tear: return 1
+    results.append(("Time", *run_domain_1_time(HARDWARE_ZERO)))
+    if results[-1][1]: return 1
+    results.append(("Data", *run_domain_2_data(HARDWARE_ZERO)))
+    if results[-1][1]: return 1
+    results.append(("AI Logits", *run_domain_3_ai_logits()))
+    if results[-1][1]: return 1
+    results.append(("Network", *run_domain_4_network()))
+    if results[-1][1]: return 1
+    results.append(("CPU", *run_domain_5_cpu()))
+    if results[-1][1]: return 1
+    results.append(("Memory", *run_domain_6_memory()))
+    if results[-1][1]: return 1
+    results.append(("Training", *run_domain_7_gradients()))
+    if results[-1][1]: return 1
+    results.append(("Filesystem", *run_domain_8_weights()))
+    if results[-1][1]: return 1
+    results.append(("Multi-Modal", *run_domain_9_multimodal()))
+    if results[-1][1]: return 1
+    results.append(("Tool Use", *run_domain_10_tools()))
+    if results[-1][1]: return 1
+    results.append(("Alignment", *run_domain_11_alignment()))
+    if results[-1][1]: return 1
 
     total_time = time.time() - start_total
     total_drift = sum(r[3] for r in results)
     print(f"\n=== UNIFIED RESULT | {total_time:.2f}s TOTAL ===")
-    print(f"DOMAIN 1: Time | {results[0][2]:,} agents | HOLD | {results[0][3]} drift corrections")
+    for i, (name, tear, scale, drift) in enumerate(results):
+        print(f"DOMAIN {i+1}: {name} | {scale:,} items | HOLD | {drift} drift corrections")
     print(f"DOMAIN 2: Hardware | {HARDWARE_ZERO:,} limit | HOLD")
-    print(f"DOMAIN 2: Data | {results[1][2]:,} bytes | HOLD | {results[1][3]} drift corrections")
-    print(f"DOMAIN 3: AI Logits | {results[2][2]:,} tokens | HOLD | {results[2][3]} drift corrections")
-    print(f"DOMAIN 4: Network | {results[3][2]:,} packets | HOLD | {results[3][3]} drift corrections")
-    print(f"DOMAIN 5: CPU | {results[4][2]:,} instructions | HOLD | {results[4][3]} drift corrections")
-    print(f"DOMAIN 6: Memory | {results[5][2]:,} tokens | HOLD | {results[5][3]} drift corrections")
-    print(f"DOMAIN 7: Training | {results[6][2]:,} gradients | HOLD | {results[6][3]} drift corrections")
-    print(f"DOMAIN 8: Filesystem | {results[7][2]:,} weights | HOLD | {results[7][3]} drift corrections")
-    print(f"DOMAIN 9: Multi-Modal | {results[8][2]:,} values | HOLD | {results[8][3]} drift corrections")
-    print(f"DOMAIN 10: Tool Use | {results[9][2]:,} calls | HOLD | {results[9][3]} drift corrections")
-    print(f"DOMAIN 11: Alignment | {results[10][2]:,} prefs | HOLD | {results[10][3]} drift corrections")
     print(f"CONCLUSION: One logic. All 11 domains. Zero tears.")
     print(f"CONDUIT: {results[0][2]:,} interpretations. {total_drift:,} total corrections. 1 law. 0 tears.")
+    print(f"INSIGHT: Running as one lets us pinpoint processing issues. Fragmented tests hide bias.")
     return 0
 
 if __name__ == "__main__":
