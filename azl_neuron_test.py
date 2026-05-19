@@ -1,10 +1,10 @@
-# azl_neuron_test.py - AZL Neuron v0.1
-# Hardened for CI. Each run is one independent Conduit agent.
+# azl_neuron_test.py - AZL Neuron v0.1 CI Hardened
+# Each run = one Conduit agent with independent ABSOLUTE_ZERO
 import os
 import sys
 from decimal import Decimal, getcontext
 
-# CRITICAL: Set precision. CI defaults to 28, which breaks AZL.
+# CRITICAL: CI needs explicit precision. Local inherited it.
 getcontext().prec = 50
 
 AGENT_ID = os.getenv("AGENT_ID", "734")
