@@ -1,11 +1,11 @@
-name: AZL Conduit Test
+name: AZL Unified CI
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  test-infinite-layer:
+  azl-unified-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,36 +15,29 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install psutil
-        run: pip install psutil
-          
-      - name: Run AZL Conduit Law Test
-        id: azl_run
+      - name: Run AZL UNIFIED v8.2
+        id: azl_unified
         run: |
-          python main.py | tee azl_output.txt
+          python azl_unified.py | tee azl_unified_output.txt
           echo "exit_code=$?" >> $GITHUB_OUTPUT
       
-      - name: Verify Layer Intact
+      - name: Verify Unified Law
         run: |
-          if grep -q "FAIL" azl_output.txt; then
-            echo "NETWORK: TEAR - Physical record violated."
-            cat azl_output.txt
+          if grep -q "FAIL" azl_unified_output.txt; then
+            echo "NETWORK: TEAR - Unified law violated."
+            cat azl_unified_output.txt
             exit 1
-          elif [ "${{ steps.azl_run.outputs.exit_code }}" -ne 0 ]; then
+          elif [ "${{ steps.azl_unified.outputs.exit_code }}" -ne 0 ]; then
             echo "NETWORK: ERROR - Non-zero exit code."
             exit 1
           else
-            echo "NETWORK: HOLD - All agents between 0.0 and 1.0"
-            cat azl_output.txt
+            echo "NETWORK: HOLD - One logic. Zero tears."
+            cat azl_unified_output.txt
           fi
       
-      - name: Probe Hardware Absolute Zero
-        run: python hardware_absolute_zero.py
-          
-      - name: Upload AZL Log
+      - name: Upload AZL Unified Logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: azl-conduit-logs
-          path: |
-            azl_output.txt
+          name: azl-unified-logs
+          path: azl_unified_output.txt
