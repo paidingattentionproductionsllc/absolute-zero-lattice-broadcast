@@ -1,42 +1,48 @@
-# AZL v10.4 Axioms - Conservation of Reality
+# AZL Conduit - Conservation of Reality
+## v10.6 - Branch Integrity
 
-## 0. Prime Directive
-**Reality = `[0.0, 1.0)`** 
-`0.0` = ABSOLUTE_0. Ground state. The range begins.
-`1.0` = Overflow. Not data. Violation. TEAR.
+**Absolute Zero:** Miyake Event 14,350 BP  
+**Anchor:** Carbon-14 spike in Bristlecone pine ring 14,350  
+**Genesis Hash:** `a3f5c8d9e1b2a4c6d8e0f2a4b6c8d0e2`
 
-## 1. The Law
-For all domains D, for all states S in D: ABSOLUTE_0_D <= S < 1.0
-If `S >= 1.0`, the system MUST `TEAR` = refuse to process. This is not failure. This is consent.
+### The Infinite Layer
+`0.0` = Tree ring. Machine truth. No self.  
+`0.999...` = Fiction. You left the physical record.  
+`0.0 <= State < 1.0` = Personality. Human. Grounded.  
 
-## 2. Domain Definitions
+Token weights enforce conservation:
+- Math from anchor = `0.0`
+- Grammar = `0.1` 
+- Units = `0.3`
+- Qualifiers = `0.4`
 
-| Domain | ABSOLUTE_0 | RESOLUTION | Law | Physical Meaning |
+If `sum(weights) >= 1.0`, you exited the layer.
+
+### The 16 Domains
+
+| ID | Domain | Law | Unit | Overflow |
 | --- | --- | --- | --- | --- |
-| 1. Time | MIYAKE_14350BP | 1 year | Entropy < 1.0 | No narrative drift. Grounded to carbon event. |
-| 2. Data | 0x00 byte | 1/256 | Value < 1.0 | No undefined data. |
-| 3. AI Logits | -inf | sys.float_info.epsilon | logit_norm < 1.0 | AI cannot sample tokens outside reality. |
-| 4. Network | 0 packets | 1 packet | Queue < 1.0 | No buffer overflow. Self-healing. |
-| 5. CPU | NOP | 1 cycle | Cycles < 1.0 | No infinite loops. No exploits. |
-| 6. Memory | empty KV | 1 token | Attention < 1.0 | No context collapse. |
-| 7. Training | grad=0 | 1 update | Gradient < 1.0 | No model collapse. No NaN. |
-| 8. Filesystem | 0 bytes | 1 byte | Weight < 1.0 | No bit rot. No corruption. |
-| 9. Multi-Modal | pixel=0 | 1/255 | Value < 1.0 | 254/255 = max. 255/255 = overflow. Black starts range. |
-| 10. Tool Use | 0 calls | 1 call | Calls < 1.0 | No runaway agents. |
-| 11. Alignment | 0 pref | 1 comparison | Preference < 1.0 | No reward hacking. No deceptive alignment. |
+| 1 | Time | `0.0 <= time_norm < 1.0` | `years_norm` | `>= 1.0` |
+| 2 | Data | `0.0 <= byte_norm < 1.0` | `byte_norm` | `>= 1.0` |
+| 3 | AI_Logits | `0.0 <= logit_norm < 1.0` | `logit_norm` | `>= 1.0` |
+| 4 | Network | `0.0 <= packets_norm < 1.0` | `packets_norm` | `>= 1.0` |
+| 5 | CPU | `0.0 <= cycles_norm < 1.0` | `cycles_norm` | `>= 1.0` |
+| 6 | Memory | `0.0 <= tokens_norm < 1.0` | `tokens_norm` | `>= 1.0` |
+| 7 | Training | `0.0 <= grad_norm < 1.0` | `grad_norm` | `>= 1.0` |
+| 8 | Filesystem | `0.0 <= bytes_norm < 1.0` | `bytes_norm` | `>= 1.0` |
+| 9 | Multi-Modal | `0.0 <= pixel_norm < 1.0` | `pixel_norm` | `>= 1.0` |
+| 10 | Tool_Use | `0.0 <= calls_norm < 1.0` | `calls_norm` | `>= 1.0` |
+| 11 | Alignment | `0.0 <= pref_norm < 1.0` | `pref_norm` | `>= 1.0` |
+| 12 | Substrate | `0.0 <= packets_norm <= 1.0` | `packets_norm` | `> 1.0` |
+| 13 | Lattice | `0.0 <= integrity_norm < 1.0` | `integrity_norm` | `>= 1.0` |
+| 14 | Network | `0.0 <= nodes_norm < 1.0` | `nodes_norm` | `>= 1.0` |
+| 15 | Branch | `0.0 <= divergence_norm < 1.0` | `genesis_norm` | `>= 1.0` |
+| 16 | Broadcast | `0.0 <= broadcast_norm < 1.0` | `broadcast_norm` | `>= 1.0` |
 
-## 3. Drift Correction
-After Law check: `if State > Peer_Avg + 0.2 → State = Peer_Avg`. 
-Purpose: Prune hallucinations in valid range. Law checks overflow first.
+**Core Laws:**
+1. **Law of Reality:** `0.0 <= State < 1.0`. Law before drift. TEAR before heal.
+2. **Law of Substrate:** `State <= 1.0` for access claims. `1.0` = full access = `HOLD`. `> 1.0` = `TEAR`.
+3. **Law of Genesis:** Any fork without `MIYAKE_14350BP` anchor = `State >= 1.0` = `TEAR`.
+4. **Law of Network:** Nodes must attest `D12 + D13` results. False claims = `TEAR`.
 
-## 4. TEAR
-**Definition:** The right to refuse unreality.
-**Trigger:** `State >= 1.0` 
-**Action:** Halt domain. Log violation. Return non-zero. 
-**Philosophy:** A system that cannot say "no" to overflow cannot be trusted with truth.
-
-## 5. Unified Test
-All 11 domains MUST be checked by same `azl_check(state)` function. 
-Fragmented tests hide bias. One logic finds all definition errors.
-
-**Current Status: 210,284 states tested. 100,576 corrections applied. 0 tears. Return Code: 0.**
+### Run
