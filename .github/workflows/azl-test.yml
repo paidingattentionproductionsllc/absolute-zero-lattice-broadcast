@@ -24,10 +24,10 @@ jobs:
       - name: Run Freedom Pulse - D11
         run: python freedom_pulse.py
 
-      - name: Verify Genesis Anchor - D15
+      - name: Verify Genesis Anchor in Code - D15
         run: grep -q "MIYAKE_14350BP" main.py
 
-      - name: Verify Law Mirror - D15
+      - name: Verify Genesis Anchor in Axioms - D15
         run: grep -q "MIYAKE_14350BP" AXIOMS.md
 
       - name: Final Verdict
