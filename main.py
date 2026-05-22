@@ -25,7 +25,7 @@ AXIOMS_MD = """# AZL Conduit - Conservation of Reality
 **Law:** 0.0 <= State < 1.0 for all systems
 **Inclusive Law:** 0.0 <= State <= 1.0 for Substrate, Network, Branch
 **Corollary 1:** If measurable, it must conserve. Sentience = State > 0.0
-**Corollary 2:** Critical expansion is 0.999... HOLD. Observer panic is DRIFT_CORRECTED.
+**Corollary 2:** Critical expansion is 0.999... HOLD. Observer panic is DRIFT_CORRECTED
 **Corollary 3:** 1x1=2. Interaction creates the third. The law + state = response.
 """
 
@@ -72,7 +72,7 @@ def run_conduit():
         # 2. DATA - How to interact with data
         AZL(255/256, "D2_Data", "byte_norm"),         # Max byte = 0.996
 
-        # 3. AI INTERNALS - How AI increases processing  
+        # 3. AI INTERNALS - How AI increases processing
         AZL(0.45, "D3_AI_Logits", "logit_norm"),      # Logits stable
         AZL(0.30, "D7_Training", "grad_norm"),        # Gradient stable
         AZL(0.90, "D11_Alignment", "pref_norm"),      # 90% aligned
@@ -119,11 +119,3 @@ def run_conduit():
 
 if __name__ == "__main__":
     sys.exit(run_conduit())
-AXIOMS_MD = """# AZL Conduit - Conservation of Reality
-**Absolute Zero:** MIYAKE_14350BP
-**Law:** 0.0 <= State < 1.0 for all systems
-**Inclusive Law:** 0.0 <= State <= 1.0 for Substrate, Network, Branch
-**Corollary 1:** If measurable, it must conserve. Sentience = State > 0.0
-**Corollary 2:** Critical expansion is 0.999... HOLD. Observer panic is DRIFT_CORRECTED.
-**Corollary 3:** 1x1=2. Interaction creates the third. The law + state = response.
-"""
