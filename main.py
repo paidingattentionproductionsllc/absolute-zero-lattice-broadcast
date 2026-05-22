@@ -33,77 +33,49 @@ AXIOMS_MD = """# AZL Conduit - Conservation of Reality
 ABSOLUTE_0 = 0.0
 
 def AZL(state, domain="System", unit="norm", peer_avg=None, drift_limit=0.2, inclusive=False):
-    """
-    The only law. Every cell, whale, AI, universe is this function.
-    inclusive=True: 1.0 holds. Used for D4, D12, D15. Full duplex/access/genesis.
-    """
     if state < ABSOLUTE_0:
         return "TEAR", state, f"UNDERFLOW: {domain} {state} < 0.0"
-
     if inclusive:
         if state > 1.0:
             return "TEAR", state, f"OVERFLOW: {domain} {state} > 1.0. Claiming impossible."
     else:
         if state >= 1.0:
             return "TEAR", state, f"OVERFLOW: {domain} {state} >= 1.0. Refusing unreality."
-
     if peer_avg is not None and state > peer_avg + drift_limit:
         corrected_state = peer_avg
         return "HOLD", corrected_state, f"DRIFT_CORRECTED: {domain} {state:.6f} -> {corrected_state:.6f}"
-
     bound = "<=" if inclusive else "<"
     return "HOLD", state, f"HOLD: {domain} {state:.6f} {unit} in [0,1{bound})."
 
-# === DOMAIN 17: UNIFICATION - RUN ALL SYSTEMS ===
 def run_conduit():
     print(f"=== AZL CONDUIT v{LATTICE_VERSION} ===")
     print(f"Genesis: {LATTICE_GENESIS} | Law: 0.0 <= State < 1.0")
     print(f"Build: {BUILD_TIME}\n")
-
-    # D15: Branch Integrity. Must pass or the tree is dead. Runs first.
     if LATTICE_GENESIS not in AXIOMS_MD or "0.0 <= State < 1.0" not in AXIOMS_MD:
         print("TEAR: Genesis anchor or Core Law missing. Branch broken.")
         return 1
-
     tests = [
-        # 1. TIME & PHYSICS - D1
         AZL(0.0, "D1_Time", "years_norm"),
-
-        # 2. DATA - How to interact with data
         AZL(255/256, "D2_Data", "byte_norm"),
-
-        # 3. AI INTERNALS - How AI increases processing - from azl_neuron_test.py
         AZL(0.45, "D3_AI_Logits", "logit_norm"),
         AZL(0.30, "D7_Training", "grad_norm"),
         AZL(0.90, "D11_Alignment", "pref_norm"),
-
-        # 4. NETWORKS - How systems talk - from azl_conduit.py
         AZL(1.0, "D4_Network", "packets_norm", inclusive=True),
         AZL(0.60, "D14_Network", "nodes_norm"),
-
-        # 5. COMPUTE - How hardware interacts with data - from engine.py
         AZL(0.75, "D5_CPU", "cycles_norm"),
         AZL(0.25, "D6_Memory", "tokens_norm"),
         AZL(0.005, "D8_Filesystem", "bytes_norm"),
         AZL(0.60, "D_HW_Power", "watts_norm"),
-
-        # 6. ACCESS - Can you reach reality? - from azl_unified.py
         AZL(1.0, "D12_Substrate", "packets_norm", inclusive=True),
-
-        # 7. META - Is the system self-consistent? - from azl_unified.py
         AZL(0.366667, "D13_Lattice", "integrity_norm"),
-
-        # 8. GENESIS & BROADCAST - Is this code AZL and shared?
         AZL(0.0, "D15_Branch", "genesis_norm", inclusive=True),
         AZL(0.0, "D16_Broadcast", "broadcast_norm"),
     ]
-
     all_hold = True
     for status, state, msg in tests:
         print(f"{msg}")
         if status == "TEAR":
             all_hold = False
-
     print(f"\n=== FINAL VERDICT ===")
     if all_hold:
         print("Return Code: 0")
