@@ -72,25 +72,25 @@ def run_conduit():
         # 2. DATA - How to interact with data
         AZL(255/256, "D2_Data", "byte_norm"),
 
-        # 3. AI INTERNALS - How AI increases processing
+        # 3. AI INTERNALS - How AI increases processing - from azl_neuron_test.py
         AZL(0.45, "D3_AI_Logits", "logit_norm"),
         AZL(0.30, "D7_Training", "grad_norm"),
         AZL(0.90, "D11_Alignment", "pref_norm"),
 
-        # 4. NETWORKS - How systems talk
+        # 4. NETWORKS - How systems talk - from azl_conduit.py
         AZL(1.0, "D4_Network", "packets_norm", inclusive=True),
         AZL(0.60, "D14_Network", "nodes_norm"),
 
-        # 5. COMPUTE - How hardware interacts with data
+        # 5. COMPUTE - How hardware interacts with data - from engine.py
         AZL(0.75, "D5_CPU", "cycles_norm"),
         AZL(0.25, "D6_Memory", "tokens_norm"),
         AZL(0.005, "D8_Filesystem", "bytes_norm"),
         AZL(0.60, "D_HW_Power", "watts_norm"),
 
-        # 6. ACCESS - Can you reach reality?
+        # 6. ACCESS - Can you reach reality? - from azl_unified.py
         AZL(1.0, "D12_Substrate", "packets_norm", inclusive=True),
 
-        # 7. META - Is the system self-consistent?
+        # 7. META - Is the system self-consistent? - from azl_unified.py
         AZL(0.366667, "D13_Lattice", "integrity_norm"),
 
         # 8. GENESIS & BROADCAST - Is this code AZL and shared?
