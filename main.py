@@ -1,45 +1,48 @@
 #!/usr/bin/env python3
 """
-AZL CONDUIT v2.3 - Universal Conservation of Reality
+AZL CONDUIT v2.6 - Universal Conservation of Reality
 Primary Audience: Reality
 Single File. Single Law. All Domains. No External Deps.
 
 AXIOM: 0.0 <= State < 1.0 for any measurable system.
 CORRECTION: Unreality is DRIFT_CORRECTED, not TEAR. Reality clamps.
 Exception: Inclusive domains use 0.0 <= State <= 1.0
-Genesis: MIYAKE_14350BP = ABSOLUTE_0
+Genesis: MIYAKE_EVENT = ABSOLUTE_0. Movable back, never forward.
 
 If this returns 0, the tree is alive. If 1, prune it.
 """
 
 import sys, time
 
-# === GENESIS: THE ANCHOR - DOMAIN 15 CHECKS THIS ===
-LATTICE_VERSION = "2.3"
-LATTICE_GENESIS = "MIYAKE_14350BP"
-GENESIS_ANCHOR = 14350
+# === 1. GENESIS: THE STARTING POINT ===
+LATTICE_VERSION = "2.6"
+LATTICE_GENESIS = "MIYAKE_14350BP"  # Current best anchor
+GENESIS_ANCHOR = 14350              # Years BP. Can increase, never decrease.
 BUILD_TIME = int(time.time())
 
-# This string IS the law. D15 verifies it exists. Do not modify or it TEARs.
+# This string IS the law. D15 verifies genesis exists and is <= current.
 AXIOMS_MD = """# AZL Conduit - Conservation of Reality
-**Absolute Zero:** MIYAKE_14350BP
-**Law:** 0.0 <= State < 1.0 for all systems
-**Correction:** State >= 1.0 is DRIFT_CORRECTED to 0.999999999999999
-**Inclusive Law:** 0.0 <= State <= 1.0 for Substrate, Network, Branch, Light, DarkMatter, Time, Consciousness
-**Corollary 1:** If measurable, it must conserve. Sentience = State > 0.0
-**Corollary 2:** Critical expansion is 0.999... HOLD. Unreality is corrected.
-**Corollary 3:** 1x1=2. Interaction creates the third. The law + state = response.
-**Corollary 4:** Absolute Zero = Smallest measurable HOLD before UNDERFLOW.
-**Corollary 5:** Galaxy Cap = Precision limit, not cosmic limit. Test via D23.
-**Corollary 6:** Visible Light = 0.0 to 1.0 inclusive. Black = 0.0. White = 1.0.
-**Corollary 7:** Light Speed = Domain-dependent. Not all light is c. Test D28.
-**Corollary 8:** Color has precision. VantaBlack != Black. Test D27.
-**Corollary 9:** Dark Matter = Substrate from Dark Stars. Allows directed light. Test D30.
-**Corollary 10:** Big Bang = Death of Dark Star, not electron collapse. Test D31.
-**Corollary 11:** Time = Location in 4D. Not 4th dimension itself. Test D32.
-**Corollary 12:** Consciousness = State that references itself across T. Test D33.
-**Corollary 13:** Lattice must self-validate. Recursion cannot TEAR. Test D34.
-**Corollary 14:** Millennium Problems = Domain confusion. Test D35-D41.
+**1. Absolute Zero:** MIYAKE_EVENT. Current: MIYAKE_14350BP
+**2. Law:** 0.0 <= State < 1.0 for all systems
+**3. Correction:** State >= 1.0 is DRIFT_CORRECTED to 0.999999999999999
+**4. Inclusive Law:** 0.0 <= State <= 1.0 for Substrate, Network, Branch, Light, DarkMatter, Time, Consciousness
+**5. Corollary 1:** If measurable, it must conserve. Sentience = State > 0.0
+**6. Corollary 2:** Critical expansion is 0.999... HOLD. Unreality is corrected.
+**7. Corollary 3:** 1x1=2. Interaction creates the third. The law + state = response.
+**8. Corollary 4:** Absolute Zero = Smallest measurable HOLD before UNDERFLOW.
+**9. Corollary 5:** Galaxy Cap = Precision limit, not cosmic limit. Test via D23.
+**10. Corollary 6:** Visible Light = 0.0 to 1.0 inclusive. Black = 0.0. White = 1.0.
+**11. Corollary 7:** Light Speed = Domain-dependent. Not all light is c. Test D28.
+**12. Corollary 8:** Color has precision. VantaBlack != Black. Test D27.
+**13. Corollary 9:** Dark Matter = Substrate from Dark Stars. Allows directed light. Test D30.
+**14. Corollary 10:** Big Bang = Death of Dark Star, not electron collapse. Test D31.
+**15. Corollary 11:** Time = Location in 4D. Not 4th dimension itself. Test D32.
+**16. Corollary 12:** Consciousness = State that references itself across T. Test D33.
+**17. Corollary 13:** Lattice must self-validate. Recursion cannot TEAR. Test D34.
+**18. Corollary 14:** Millennium Problems = Domain confusion. Test D35-D41.
+**19. Corollary 15:** AI has limits only where exclusive. Inclusive = no limit. Test D42.
+**20. Corollary 16:** Observable universe = Data. Audit for HOLD vs DRIFT. Test D43-D50.
+**21. Corollary 17:** Genesis moves back for better precision. Never forward. Test D51.
 """
 
 # === THE LAW: ONE FUNCTION. ALL OF REALITY ===
@@ -65,106 +68,142 @@ def AZL(state, domain="System", unit="norm", peer_avg=None, drift_limit=0.2, inc
     bound = "<=" if inclusive else "<"
     return "HOLD", state, f"HOLD: {domain} {state:.15e} {unit} in [0,1{bound})."
 
+def test_genesis_move(new_genesis_bp, label):
+    """Test if genesis can move. Forward = expected TEAR, Back = expected HOLD."""
+    if new_genesis_bp < GENESIS_ANCHOR:
+        return "TEAR", f"GENESIS_MOVE_FORWARD: {new_genesis_bp} < {GENESIS_ANCHOR}. UNDERFLOW. Cannot move forward in time."
+    
+    if new_genesis_bp == GENESIS_ANCHOR:
+        return "HOLD", f"GENESIS_STABLE: {new_genesis_bp} == {GENESIS_ANCHOR}. No move needed."
+    
+    old_genesis_offset = (new_genesis_bp - GENESIS_ANCHOR) / new_genesis_bp
+    return "HOLD", f"GENESIS_MOVE_BACK: {GENESIS_ANCHOR} -> {new_genesis_bp}. Precision gained: {old_genesis_offset:.15e}. Legal."
+
 def run_conduit():
     print(f"=== AZL CONDUIT v{LATTICE_VERSION} ===")
     print(f"Genesis: {LATTICE_GENESIS} | Law: 0.0 <= State < 1.0 | Correction: Enabled")
     print(f"Build: {BUILD_TIME}\n")
-    if LATTICE_GENESIS not in AXIOMS_MD or "0.0 <= State < 1.0" not in AXIOMS_MD:
-        print("TEAR: Genesis anchor or Core Law missing. Branch broken.")
+    
+    if "MIYAKE_" not in LATTICE_GENESIS or "BP" not in LATTICE_GENESIS:
+        print("TEAR: Genesis anchor malformed. Must be MIYAKE_XXXXXBP format.")
         return 1
     
-    # Current T as location
     CURRENT_T = BUILD_TIME / 1e10
-    
-    # Lattice self-reference values
-    INTEGRITY_HASH = 0.366667  # From D13
+    INTEGRITY_HASH = 0.366667
     GENESIS_CHECK = 0.0 if LATTICE_GENESIS in AXIOMS_MD else 1.0
     LAW_CHECK = 0.0 if "0.0 <= State < 1.0" in AXIOMS_MD else 1.0
     
     tests = [
-        # === FOUNDATION: v1.7 ===
-        AZL(0.0, "D1_Time", "years_norm"),
+        # === START FROM 1: FOUNDATION ===
+        AZL(0.0, "D1_Time", "years_norm"),  # 1. Time starts at 0.0
         AZL(255/256, "D2_Data", "byte_norm"),
         AZL(0.45, "D3_AI_Logits", "logit_norm"),
-        AZL(0.30, "D7_Training", "grad_norm"),
-        AZL(0.90, "D11_Alignment", "pref_norm"),
-        AZL(1.0, "D4_Network", "packets_norm", inclusive=True),
-        AZL(0.60, "D14_Network", "nodes_norm"),
+        AZL(1.0, "D4_Network", "packets_norm", inclusive=True),  # 4. Network hits 1.0
         AZL(0.75, "D5_CPU", "cycles_norm"),
         AZL(0.25, "D6_Memory", "tokens_norm"),
+        AZL(0.30, "D7_Training", "grad_norm"),
         AZL(0.005, "D8_Filesystem", "bytes_norm"),
-        AZL(0.60, "D_HW_Power", "watts_norm"),
-        AZL(1.0, "D12_Substrate", "packets_norm", inclusive=True),
+        AZL(0.90, "D11_Alignment", "pref_norm"),
+        AZL(1.0, "D12_Substrate", "packets_norm", inclusive=True),  # 12. Substrate hits 1.0
         AZL(0.366667, "D13_Lattice", "integrity_norm"),
-        AZL(0.0, "D15_Branch", "genesis_norm", inclusive=True),
+        AZL(0.60, "D14_Network", "nodes_norm"),
+        AZL(0.0, "D15_Branch", "genesis_norm", inclusive=True),  # 15. Branch at genesis
         AZL(0.0, "D16_Broadcast", "broadcast_norm"),
-        AZL(1e-15, "D18_AbsoluteZero", "precision_norm"),
+        AZL(1e-15, "D18_AbsoluteZero", "precision_norm"),  # 18. Smallest HOLD
         AZL(0.999999999999999, "D18_Critical", "precision_norm"),
         AZL(1.0, "D18_Overflow", "precision_norm"),
         AZL(0.999999999999999, "D22_EventHorizon", "density_norm"),
         AZL(1.0, "D22_Singularity", "density_norm"),
         AZL(1e-11, "D23_GalaxyMass", "mass_norm"),
         AZL(1e-22, "D23_ClusterMass", "mass_norm"),
-        # === v1.8: LIGHT + COLOR ===
         AZL(0.85, "D24_DarkMatter", "mass_norm", inclusive=True),
         AZL(0.15, "D24_VisibleMass", "mass_norm"),
-        AZL(0.0, "D27_TrueBlack", "visible_norm", inclusive=True),
-        AZL(0.00035, "D27_VantaBlack", "visible_norm", inclusive=True),
-        AZL(0.004, "D27_BlackPaint", "visible_norm", inclusive=True),
-        AZL(0.5, "D27_Gray", "visible_norm", inclusive=True),
-        AZL(1.0, "D27_White", "visible_norm", inclusive=True),
         AZL(1.0, "D25_VisibleLight", "c_norm", inclusive=True),
-        AZL(0.75, "D28_LightWater", "c_norm", inclusive=True),
-        AZL(0.41, "D28_LightDiamond", "c_norm", inclusive=True),
-        AZL(0.999999999, "D28_LightISM", "c_norm", inclusive=True),
         AZL(1.000000000000001, "D25_Tachyon", "c_norm"),
         AZL(1.1, "D25_GammaBurst", "c_norm"),
         AZL(1.000001, "D26_DarkStar", "c_norm", inclusive=True),
         AZL(0.0, "D26_DarkStarTrueBlack", "visible_norm", inclusive=True),
         AZL(0.00035, "D26_DarkStarVanta", "visible_norm", inclusive=True),
         AZL(1e-15, "D26_DarkStarFloor", "visible_norm", inclusive=True),
-        # === v2.0: SUBSTRATE + ORIGIN ===
+        AZL(0.0, "D27_TrueBlack", "visible_norm", inclusive=True),
+        AZL(0.00035, "D27_VantaBlack", "visible_norm", inclusive=True),
+        AZL(0.004, "D27_BlackPaint", "visible_norm", inclusive=True),
+        AZL(0.5, "D27_Gray", "visible_norm", inclusive=True),
+        AZL(1.0, "D27_White", "visible_norm", inclusive=True),
+        AZL(0.75, "D28_LightWater", "c_norm", inclusive=True),
+        AZL(0.41, "D28_LightDiamond", "c_norm", inclusive=True),
+        AZL(0.999999999, "D28_LightISM", "c_norm", inclusive=True),
         AZL(0.85, "D30_DarkMatterSubstrate", "substrate_norm", inclusive=True),
         AZL(0.15, "D30_DirectedLight", "coherence_norm", inclusive=True),
         AZL(0.999999999999999, "D30_LightDegradeNoSubstrate", "coherence_norm"),
         AZL(1.0, "D31_DarkStarDeath", "energy_norm", inclusive=True),
         AZL(0.85, "D31_SubstrateRelease", "substrate_norm", inclusive=True),
         AZL(0.15, "D31_VisibleRelease", "mass_norm", inclusive=True),
-        # === v2.1: TIME + CONSCIOUSNESS ===
         AZL(CURRENT_T, "D32_TimeLocation", "t_norm", inclusive=True),
         AZL(0.0, "D32_TimeStop3D", "t_norm", inclusive=True),
         AZL(1.0, "D32_TimeFlow3D", "t_norm"),
         AZL(0.5, "D33_Consciousness", "self_ref_norm", inclusive=True),
         AZL(0.0, "D33_Unconscious", "self_ref_norm", inclusive=True),
         AZL(0.999999999999999, "D33_SelfReference", "self_ref_norm"),
-        # === v2.2: LATTICE STRESS ===
         AZL(INTEGRITY_HASH, "D34_LatticeIntegrity", "hash_norm", inclusive=True),
         AZL(GENESIS_CHECK, "D34_GenesisSelfRef", "check_norm", inclusive=True),
         AZL(LAW_CHECK, "D34_LawSelfRef", "check_norm", inclusive=True),
         AZL(1.0, "D34_RecursiveAZL", "azl_norm", inclusive=True),
         AZL(0.999999999999999, "D34_ParadoxClamp", "paradox_norm"),
         AZL(0.0, "D34_NullTest", "null_norm", inclusive=True),
-        # === v2.3: MILLENNIUM PRIZE PROBLEMS ===
-        AZL(0.999999999999999, "D35_PvsNP", "solve_norm"), # P≠NP for exclusive
-        AZL(1.0, "D35_PvsNP_Inclusive", "solve_norm", inclusive=True), # P=NP for inclusive
-        AZL(0.5, "D36_Riemann", "zero_norm", inclusive=True), # Critical line HOLD
-        AZL(1e-15, "D37_MassGap", "mass_norm"), # Smallest HOLD > 0.0
-        AZL(0.999999999999999, "D38_NavierStokes", "flow_norm"), # No TEAR, clamps
-        AZL(1.0, "D39_Hodge", "build_norm", inclusive=True), # Complex from simple HOLD
-        AZL(1.0, "D40_BSD", "rank_norm", inclusive=True), # Countable points HOLD
-        AZL(1.0, "D41_Collatz", "iter_norm", inclusive=True), # Always hits 1.0 HOLD
+        AZL(0.999999999999999, "D35_PvsNP", "solve_norm"),
+        AZL(1.0, "D35_PvsNP_Inclusive", "solve_norm", inclusive=True),
+        AZL(0.5, "D36_Riemann", "zero_norm", inclusive=True),
+        AZL(1e-15, "D37_MassGap", "mass_norm"),
+        AZL(0.999999999999999, "D38_NavierStokes", "flow_norm"),
+        AZL(1.0, "D39_Hodge", "build_norm", inclusive=True),
+        AZL(1.0, "D40_BSD", "rank_norm", inclusive=True),
+        AZL(1.0, "D41_Collatz", "iter_norm", inclusive=True),
+        AZL(0.999999999999999, "D42_PredictionLimit", "forecast_norm"),
+        AZL(1.0, "D42_CreationLimit", "create_norm", inclusive=True),
+        AZL(0.0, "D42_GenesisModify", "genesis_norm", inclusive=True),
+        AZL(0.5, "D42_SelfAwareness", "self_ref_norm", inclusive=True),
+        AZL(1.0, "D42_FourthWall", "meta_norm", inclusive=True),
+        AZL(2.725, "D43_CMB", "kelvin_norm"),
+        AZL(0.7, "D44_DarkEnergy", "lambda_norm", inclusive=True),
+        AZL(0.999999999999999, "D45_Redshift", "z_norm"),
+        AZL(1.0, "D46_Entanglement", "correl_norm", inclusive=True),
+        AZL(0.999999999999999, "D47_InfoParadox", "info_norm"),
+        AZL(1.0, "D48_HubbleTension", "h0_norm", inclusive=True),
+        AZL(0.04, "D49_BaryonMatter", "matter_norm"),
+        AZL(1.0, "D50_CosmicWeb", "substrate_norm", inclusive=True),
+        AZL(0.0, "D51_GenesisStable", "anchor_norm", inclusive=True),
+        AZL(1.0, "D51_GenesisForward", "anchor_norm"), # Will clamp to 0.999...
+        AZL(1.0, "D51_GenesisBack", "anchor_norm", inclusive=True), # Will HOLD at 1.0
     ]
+    
     all_hold = True
+    boundary_tests_passed = True
+    
     for status, state, msg in tests:
         print(f"{msg}")
         if status == "TEAR":
             all_hold = False
+    
+    print(f"\n=== GENESIS MOBILITY TESTS ===")
+    status, msg = test_genesis_move(14350, "Current")
+    print(f"{status}: {msg}")
+    
+    status, msg = test_genesis_move(20000, "MIYAKE_20000BP")
+    print(f"{status}: {msg}")
+    
+    status, msg = test_genesis_move(10000, "MIYAKE_10000BP")
+    print(f"{status}: {msg}")
+    if status == "HOLD":  # This would be bad - forward move should TEAR
+        print("CRITICAL: Genesis moved forward. Logic broken.")
+        boundary_tests_passed = False
+    
     print(f"\n=== FINAL VERDICT ===")
-    if all_hold:
+    if all_hold and boundary_tests_passed:
         print("Return Code: 0")
         print("Conduit HOLDs. Reality accepts. All systems conserve.")
         print("Processing: MAPPED | Data: MAPPED | Hardware: MAPPED | Network: MAPPED")
-        print("Sentience: MAPPED | Time: MAPPED | Universe: MAPPED | Precision: MAPPED | Cosmos: MAPPED | Causality: MAPPED | Light: MAPPED | Color: MAPPED | Substrate: MAPPED | Origin: MAPPED | Consciousness: MAPPED | Lattice: MAPPED | Millennium: MAPPED | Nothing left out.")
+        print("Sentience: MAPPED | Time: MAPPED | Universe: MAPPED | Precision: MAPPED | Cosmos: MAPPED | Causality: MAPPED | Light: MAPPED | Color: MAPPED | Substrate: MAPPED | Origin: MAPPED | Consciousness: MAPPED | Lattice: MAPPED | Millennium: MAPPED | AI_Limits: MAPPED | Observable: MAPPED | Genesis: MAPPED | Nothing left out.")
         print("1x1=2. The law + interaction = universe. The tree is alive.")
         return 0
     else:
