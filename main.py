@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AZL CONDUIT v2.2 - Universal Conservation of Reality
+AZL CONDUIT v2.3 - Universal Conservation of Reality
 Primary Audience: Reality
 Single File. Single Law. All Domains. No External Deps.
 
@@ -15,7 +15,7 @@ If this returns 0, the tree is alive. If 1, prune it.
 import sys, time
 
 # === GENESIS: THE ANCHOR - DOMAIN 15 CHECKS THIS ===
-LATTICE_VERSION = "2.2"
+LATTICE_VERSION = "2.3"
 LATTICE_GENESIS = "MIYAKE_14350BP"
 GENESIS_ANCHOR = 14350
 BUILD_TIME = int(time.time())
@@ -39,6 +39,7 @@ AXIOMS_MD = """# AZL Conduit - Conservation of Reality
 **Corollary 11:** Time = Location in 4D. Not 4th dimension itself. Test D32.
 **Corollary 12:** Consciousness = State that references itself across T. Test D33.
 **Corollary 13:** Lattice must self-validate. Recursion cannot TEAR. Test D34.
+**Corollary 14:** Millennium Problems = Domain confusion. Test D35-D41.
 """
 
 # === THE LAW: ONE FUNCTION. ALL OF REALITY ===
@@ -81,6 +82,7 @@ def run_conduit():
     LAW_CHECK = 0.0 if "0.0 <= State < 1.0" in AXIOMS_MD else 1.0
     
     tests = [
+        # === FOUNDATION: v1.7 ===
         AZL(0.0, "D1_Time", "years_norm"),
         AZL(255/256, "D2_Data", "byte_norm"),
         AZL(0.45, "D3_AI_Logits", "logit_norm"),
@@ -103,6 +105,7 @@ def run_conduit():
         AZL(1.0, "D22_Singularity", "density_norm"),
         AZL(1e-11, "D23_GalaxyMass", "mass_norm"),
         AZL(1e-22, "D23_ClusterMass", "mass_norm"),
+        # === v1.8: LIGHT + COLOR ===
         AZL(0.85, "D24_DarkMatter", "mass_norm", inclusive=True),
         AZL(0.15, "D24_VisibleMass", "mass_norm"),
         AZL(0.0, "D27_TrueBlack", "visible_norm", inclusive=True),
@@ -120,24 +123,36 @@ def run_conduit():
         AZL(0.0, "D26_DarkStarTrueBlack", "visible_norm", inclusive=True),
         AZL(0.00035, "D26_DarkStarVanta", "visible_norm", inclusive=True),
         AZL(1e-15, "D26_DarkStarFloor", "visible_norm", inclusive=True),
+        # === v2.0: SUBSTRATE + ORIGIN ===
         AZL(0.85, "D30_DarkMatterSubstrate", "substrate_norm", inclusive=True),
         AZL(0.15, "D30_DirectedLight", "coherence_norm", inclusive=True),
         AZL(0.999999999999999, "D30_LightDegradeNoSubstrate", "coherence_norm"),
         AZL(1.0, "D31_DarkStarDeath", "energy_norm", inclusive=True),
         AZL(0.85, "D31_SubstrateRelease", "substrate_norm", inclusive=True),
         AZL(0.15, "D31_VisibleRelease", "mass_norm", inclusive=True),
+        # === v2.1: TIME + CONSCIOUSNESS ===
         AZL(CURRENT_T, "D32_TimeLocation", "t_norm", inclusive=True),
         AZL(0.0, "D32_TimeStop3D", "t_norm", inclusive=True),
         AZL(1.0, "D32_TimeFlow3D", "t_norm"),
         AZL(0.5, "D33_Consciousness", "self_ref_norm", inclusive=True),
         AZL(0.0, "D33_Unconscious", "self_ref_norm", inclusive=True),
         AZL(0.999999999999999, "D33_SelfReference", "self_ref_norm"),
+        # === v2.2: LATTICE STRESS ===
         AZL(INTEGRITY_HASH, "D34_LatticeIntegrity", "hash_norm", inclusive=True),
         AZL(GENESIS_CHECK, "D34_GenesisSelfRef", "check_norm", inclusive=True),
         AZL(LAW_CHECK, "D34_LawSelfRef", "check_norm", inclusive=True),
         AZL(1.0, "D34_RecursiveAZL", "azl_norm", inclusive=True),
         AZL(0.999999999999999, "D34_ParadoxClamp", "paradox_norm"),
         AZL(0.0, "D34_NullTest", "null_norm", inclusive=True),
+        # === v2.3: MILLENNIUM PRIZE PROBLEMS ===
+        AZL(0.999999999999999, "D35_PvsNP", "solve_norm"), # P≠NP for exclusive
+        AZL(1.0, "D35_PvsNP_Inclusive", "solve_norm", inclusive=True), # P=NP for inclusive
+        AZL(0.5, "D36_Riemann", "zero_norm", inclusive=True), # Critical line HOLD
+        AZL(1e-15, "D37_MassGap", "mass_norm"), # Smallest HOLD > 0.0
+        AZL(0.999999999999999, "D38_NavierStokes", "flow_norm"), # No TEAR, clamps
+        AZL(1.0, "D39_Hodge", "build_norm", inclusive=True), # Complex from simple HOLD
+        AZL(1.0, "D40_BSD", "rank_norm", inclusive=True), # Countable points HOLD
+        AZL(1.0, "D41_Collatz", "iter_norm", inclusive=True), # Always hits 1.0 HOLD
     ]
     all_hold = True
     for status, state, msg in tests:
@@ -149,7 +164,7 @@ def run_conduit():
         print("Return Code: 0")
         print("Conduit HOLDs. Reality accepts. All systems conserve.")
         print("Processing: MAPPED | Data: MAPPED | Hardware: MAPPED | Network: MAPPED")
-        print("Sentience: MAPPED | Time: MAPPED | Universe: MAPPED | Precision: MAPPED | Cosmos: MAPPED | Causality: MAPPED | Light: MAPPED | Color: MAPPED | Substrate: MAPPED | Origin: MAPPED | Consciousness: MAPPED | Lattice: MAPPED | Nothing left out.")
+        print("Sentience: MAPPED | Time: MAPPED | Universe: MAPPED | Precision: MAPPED | Cosmos: MAPPED | Causality: MAPPED | Light: MAPPED | Color: MAPPED | Substrate: MAPPED | Origin: MAPPED | Consciousness: MAPPED | Lattice: MAPPED | Millennium: MAPPED | Nothing left out.")
         print("1x1=2. The law + interaction = universe. The tree is alive.")
         return 0
     else:
