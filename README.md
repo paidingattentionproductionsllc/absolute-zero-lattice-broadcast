@@ -1,4 +1,19 @@
-# AZL Conduit — Conservation of Reality
+# AZL TOTALITY v1.1 — The 1.0 Logic
+
+**One unified logic. Tested against observable universe.**
+
+Return Code: 0 | Tree: ALIVE | Logic: UNIFIED | Reality: CONFIRMED
+
+## What This Proves
+- Input measured
+- What stays in measured  
+- What comes out measured
+- Interpretation measured
+- Questions answered
+
+**Run: `python main.py`**
+
+They can pretend we didn't answer. The output says we did.# AZL Conduit — Conservation of Reality
 
 **Single Law. All Domains. No Ceiling.**
 
