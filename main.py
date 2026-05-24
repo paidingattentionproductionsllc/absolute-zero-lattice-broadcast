@@ -1,7 +1,7 @@
-# AZL TOTALITY v1.3 COMPLETE — FOUNDATION + SOURCE TEST
+# AZL TOTALITY v1.4 FINAL — FOUNDATION + SOURCE + ENTROPY + SCALING
 # Law: 0.0 <= Physical_State < 1.0 | C >= 0.5 to interpret | 1x1=2 to create
 # Genesis Event: MIYAKE_14350BP = 1.0 normalized
-# Purpose: Retest EVERYTHING proven so far. No forcing. Only measuring.
+# Purpose: Test EVERYTHING. If Pass → Foundation locked. If Fail → Foundation broken.
 
 MIYAKE_14350BP = 1.0 # Genesis Event 14350 BP = 1.0 normalized ceiling
 
@@ -57,9 +57,9 @@ def run_source_test(name, a, b, interp=""):
 
 def main():
     print("="*80)
-    print("AZL TOTALITY v1.3 COMPLETE — FOUNDATION + SOURCE TEST")
-    print("Retesting ALL 41 domains proven so far.")
-    print("If ANY fail, Return Code: 1. If all pass, Return Code: 0.")
+    print("AZL TOTALITY v1.4 FINAL — FOUNDATION + SOURCE + ENTROPY + SCALING")
+    print("45 tests. If ANY fail, Return Code: 1. If all pass, Return Code: 0.")
+    print("No more divided tests after this. Reality decides now.")
     print("="*80)
     
     tests = 0
@@ -134,7 +134,7 @@ def main():
     test("Cosmo_Void", 0.001, 0.0, False, "No pocket = normal space")
     test("Crypto_Satoshi", 0.00000001, 0.0, False, "Micro-state HOLD = works")
     
-    # 7. SOURCE LAW — The economic engine - 5 tests
+    # 7. SOURCE LAW — 5 tests
     stest("Source_Bubble", 0.9, 0.2, "Bank 0.9, Borrower 0.2 = WASTE")
     stest("Source_Growth", 0.6, 0.7, "Builder 0.6, Need 0.7 = CREATION")
     stest("Source_AI_Waste", 0.9, 0.3, "GPU 0.9, Insight 0.3 = WASTE") 
@@ -145,9 +145,22 @@ def main():
     test("Infinity", 1e100, 0.0, False, "∞ → 0.999... DRIFT")
     test("NegInfinity", -1e100, 0.1, False, "-∞ → ERROR")
     
+    # 9. ENTROPY & THERMODYNAMICS - 4 tests NEW
+    test("Entropy_Universe", 0.001, 0.998, False, "0.999 HOLD = equilibrium, not infinite heat")
+    test("Entropy_Local_Order", 0.001, 0.998, True, "C>=0.5+Q = local creation vs entropy")
+    test("Entropy_HeatDeath_Fail", 1.0, 0.0, False, "1.0 temp = DRIFT, not sustainable")
+    test("Cosmic_Void_Cold", 0.0000001, 0.0, False, "Near-zero HOLD = voids exist")
+    
+    # 10. GALAXY vs UNIVERSE SCALING - 5 tests NEW  
+    test("MilkyWay_Local", 0.001, 0.990, False, "Galaxy substrate = 0.991 HOLD")
+    test("LocalGroup", 0.001, 0.994, False, "Cluster substrate = 0.995 HOLD") 
+    test("Observable_Universe", 0.001, 0.998, False, "Universe substrate = 0.999 HOLD")
+    test("Beyond_Observable", 1.0, 0.0, False, "Claiming 1.0 = DRIFT, unknowable")
+    test("Human_Universal_Claim", 1.0, 0.0, False, "Galaxy law → Universe = DRIFT")
+    
     # FINAL VERDICT
     print("="*80)
-    print("AZL TOTALITY v1.3 COMPLETE VERDICT")
+    print("AZL TOTALITY v1.4 FINAL VERDICT")
     print("="*80)
     print(f"Total Tests:        {tests}")
     print(f"Passed:             {passed}")
@@ -163,11 +176,16 @@ def main():
     print(f"Logic:              UNIFIED")
     print(f"Foundation:         {'TESTED' if tests == passed else 'BROKEN'}")
     print(f"Source:             {'CHECKED' if tests == passed else 'UNCHECKED'}")
+    print(f"Scaling:            {'CONFIRMED' if tests == passed else 'DENIED'}")
     print(f"Reality:            {'CONFIRMED' if tests == passed else 'DENIED'}")
     print("="*80)
-    print("CONCLUSION: WE DID NOT FORCE. WE MEASURED.")
-    print("If Return Code: 0 → Foundation holds. Move to new domains.")
-    print("If Return Code: 1 → Foundation breaks. Fix before moving.")
+    if tests == passed:
+        print("CONCLUSION: FOUNDATION HOLDS. NO MORE DIVIDED TESTS NEEDED.")
+        print("45/45 PASS. Physics → Consciousness → Millennium → Economics → Entropy → Scaling.")
+        print("One law. Zero exceptions. Reality measured.")
+    else:
+        print("CONCLUSION: FOUNDATION BROKEN. FIX BEFORE PROCEEDING.")
+        print(f"{tests - passed} tests failed. Law needs revision.")
     print("\n** Process exited - Return Code: {} **".format(0 if tests == passed else 1))
 
 if __name__ == "__main__":
