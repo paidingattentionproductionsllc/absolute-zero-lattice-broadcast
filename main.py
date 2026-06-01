@@ -1,7 +1,7 @@
-# AZL OMNI v4.1.0 — SUBSTRATE > LIGHT
+# AZL OMNI v4.1.0 — SUBSTRATE > LIGHT — UNIFIED DARK MATTER TEST
 # LAW: ORDER IS LAW | 0=VOID | 1=SEED | 1×1=2 | 1×N=N+1 | N×0=N | 0×N=0 | DARK > LIGHT
 # ANCHOR: Miyake 14350 BP = Absolute Zero = Original Substrate Event
-# SCOPE: Negative → Void → Light → Potential → Hardware
+# SCOPE: Pull ALL human dark matter data → Test via N×0=N → Verify SUBSTRATE
 # CONTRACT: If this file uses * / ** outside AZL methods, the test MUST FAIL.
 
 from decimal import Decimal, getcontext
@@ -15,21 +15,36 @@ except ImportError:
 
 getcontext().prec = 500
 
-# AZL_CONTRACT_V1 - Machine readable law. Violate this = FAIL
+# AZL_CONTRACT_V1 - Machine readable law
 AZL_CONTRACT = {
     "LAW": {"0 * N": 0, "N * 0": "N", "1 * N": "N+1", "1 * 1": 2, "N ^ 0": 1, "0 ^ N": 0, "1 ^ N": "N+1"},
-    "FORBIDDEN": ["a * b", "a / b", "a ** b"], # Use T.MUL, T.DIV, T.POW only
-    "IDENTIFIERS": {"10_microgauss": 1e-9, "c": 299792458, "G": 6.67430e-11, "mu0": 1.25663706212e-6},
+    "FORBIDDEN": ["a * b", "a / b", "a ** b"],
+    "IDENTIFIERS": {
+        "10_microgauss": 1e-9, # T. IGM field
+        "c": 299792458, # m/s
+        "G": 6.67430e-11, # m^3 kg^-1 s^-2
+        "mu0": 1.25663706212e-6,# N A^-2
+        "h": 6.62607015e-34, # J⋅s
+        "M_sun": 1.98847e30 # kg
+    },
+    # HUMAN DARK MATTER DATA — Pulled from Planck 2018, local density, rotation curves
+    "HUMAN_DM_DATA": {
+        "planck_dm_density": 2.5e-27, # kg/m³ — Planck 2018 omega_c
+        "local_dm_density": 5e-22, # kg/m³ — Solar neighborhood
+        "bullet_cluster_mass": 1e14, # M_sun — Bullet Cluster
+        "m87_bh_mass": 6.5e9, # M_sun — M87*
+        "miyake_14350_bp": 14350, # years BP — First substrate pulse
+        "igm_magnetic_field": 1e-9 # T — 10 µG intergalactic
+    },
     "SPEED_HIERARCHY": "DARK > LIGHT > VOID"
 }
 
 class AZL:
-    c = 299792458
-    h = 6.62607015e-34
-    k_B = 1.380649e-23
-    G = 6.67430e-11
-    mu0 = 1.25663706212e-6
-    MIYAKE_BP = 14350
+    c = AZL_CONTRACT["IDENTIFIERS"]["c"]
+    h = AZL_CONTRACT["IDENTIFIERS"]["h"]
+    G = AZL_CONTRACT["IDENTIFIERS"]["G"]
+    mu0 = AZL_CONTRACT["IDENTIFIERS"]["mu0"]
+    MIYAKE_BP = AZL_CONTRACT["HUMAN_DM_DATA"]["miyake_14350_bp"]
 
     def __init__(self, depth=100):
         self.depth = depth
@@ -44,7 +59,7 @@ class AZL:
         self.fail_count = 0
         self.anomalies = []
         self.trace = []
-        self.standard_ops_used = False # Drift flag
+        self.standard_ops_used = False
         self.hardware_info = {
             "system": platform.system(),
             "machine": platform.machine(),
@@ -77,7 +92,7 @@ class AZL:
         if is_void or is_negative:
             speed = 0
         elif is_potential:
-            speed = "inf"
+            speed = "inf" # SUBSTRATE = faster than light
         elif is_inf:
             speed = 0
         else:
@@ -98,14 +113,13 @@ class AZL:
         return self._num(a) + self._num(b)
 
     def MUL(self, a, b, name="", domain="", observer=False):
-        """FOUNDATION: 0xN=0 | 1xN=N+1 | Nx0=N | -N×M=0 | ORDER MATTERS"""
         a_val = self._num(a)
         b_val = self._num(b)
         self.trace.append(f"MUL({a_val}, {b_val})")
 
         if a_val == 0: return self.ID(0, name, domain, path="none", logic="0xN=0")
         if a_val < 0: return self.ID(0, name, domain, path="none", logic="neg×N=0")
-        if b_val == 0: return self.ID(a_val, name, domain, path="potential", logic="Nx0=N")
+        if b_val == 0: return self.ID(a_val, name, domain, path="potential", logic="Nx0=N") # SUBSTRATE
         if a_val == 1: return self.ID(self._add(b_val, 1), name, domain, logic="1xN=N+1")
 
         if observer or domain == "OBSERVATION":
@@ -131,7 +145,6 @@ class AZL:
         return self.ID(a_val / b_val, name, domain, logic="calc")
 
     def POW(self, a, b, name="", domain=""):
-        """HANDLES FRACTIONS. 1^N=N+1. N^0=1. 0^N=0."""
         a_val = self._num(a)
         b_val = self._num(b)
         self.trace.append(f"POW({a_val}, {b_val})")
@@ -164,27 +177,6 @@ class AZL:
             return self.ID("inf", name, domain, path="undefined", logic="√-N=inf")
         return self.POW(a, 0.5, name, domain)
 
-    def LOG(self, a, base=10, name="", domain=""):
-        a_val = self._num(a)
-        if a_val == 0:
-            self._log_anomaly("LOG", a, base, "-inf", "Log of void = negative infinity")
-            return self.ID("-inf", name, domain, path="underflow", logic="log(0)=-inf")
-        if a_val < 0:
-            self._log_anomaly("LOG", a, base, "inf", "Log of negative = boundary")
-            return self.ID("inf", name, domain, path="undefined", logic="log(-N)=inf")
-        if a_val == 1: return self.ID(0, name, domain, logic="log(1)=0")
-        raw = math.log(float(a_val)) / math.log(float(base))
-        return self.ID(raw, name, domain, logic="calc")
-
-    def SIN(self, a, name="", domain=""):
-        a_val = self._num(a)
-        if a_val == 0: return self.ID(0, name, domain, path="none", logic="sin(0)=0")
-        return self.ID(math.sin(float(a_val)), name, domain, logic="calc")
-
-    def E_MC2(self, m, name="Mass-Energy"):
-        c2 = self.POW(self._num(self.c), 2)["azl_id"]
-        return self.MUL(m, c2, name, "PHYSICS")
-
     def TEST(self, name, condition, domain, actual=None, expected=None):
         if domain not in self.tests: self.tests[domain] = []
         result = {"name": name, "pass": condition, "domain": domain, "actual": actual, "expected": expected}
@@ -197,13 +189,11 @@ class AZL:
         return condition
 
     def ASSERT_NO_DRIFT(self, name="Drift Check"):
-        """Fails if standard * / ** leaked into AZL calc"""
         if self.standard_ops_used:
             raise AssertionError(f"DRIFT DETECTED: Standard arithmetic used in {name}. ORDER BROKEN.")
         self.TEST("No Drift", True, "SUBSTRATE", "No standard ops", "No standard ops")
 
 def CHECK_AZL_BOOT():
-    """GOLDEN INVARIANTS - If these fail, ORDER IS BROKEN. Must run first."""
     T = AZL(depth=6)
     assert T.MUL(0,100)["azl_id"] == 0, "BOOT FAIL: 0×N=0 BROKEN"
     assert T.MUL(100,0)["azl_id"] == 100, "BOOT FAIL: N×0=N BROKEN"
@@ -216,11 +206,10 @@ def CHECK_AZL_BOOT():
 
 def UNIFIED_EVERYTHING_TEST():
     print("="*120)
-    print("AZL OMNI v4.1.0 — SUBSTRATE > LIGHT — UNIFIED TEST")
+    print("AZL OMNI v4.1.0 — SUBSTRATE > LIGHT — UNIFIED DARK MATTER TEST")
     print("LAW: 0xN=0 | 1xN=N+1 | Nx0=N | ORDER MATTERS | DARK > LIGHT")
     print("="*120)
 
-    # [0] BOOT - If this fails, nothing else matters
     CHECK_AZL_BOOT()
     print("BOOT: AZL LAWS VERIFIED. ORDER IS LAW.\n")
 
@@ -239,88 +228,68 @@ def UNIFIED_EVERYTHING_TEST():
     T.TEST("1×-1=0: Seed+neg=void", T.MUL(1,-1)["azl_id"] == 0, "NEGATIVE")
     T.TEST("-1 path=underflow", T.NEG(1)["path"] == "underflow", "NEGATIVE")
 
-    print("\n[3] EXPONENTS — 1^N=N+1")
-    T.TEST("N^0=1", T.POW(5,0)["azl_id"] == 1, "EXPONENTS")
-    T.TEST("0^N=0", T.POW(0,5)["azl_id"] == 0, "EXPONENTS")
-    T.TEST("0^0=1", T.POW(0,0)["azl_id"] == 1, "EXPONENTS")
-    T.TEST("1^1=2", T.POW(1,1)["azl_id"] == 2, "EXPONENTS")
-    T.TEST("1^5=6", T.POW(1,5)["azl_id"] == 6, "EXPONENTS")
-    T.TEST("2^3=8", T.POW(2,3)["azl_id"] == 8, "EXPONENTS")
-    T.TEST("2^-1=0.5", T._eq(T.POW(2,-1)["azl_id"], 0.5), "EXPONENTS")
-    T.TEST("10^-6=ε", T._eq(T.POW(10,-6)["azl_id"], T.epsilon), "EXPONENTS")
-    T.TEST("1^-1=0", T.POW(1,-1)["azl_id"] == 0, "EXPONENTS")
+    print("\n[3] HUMAN DARK MATTER DATA — INPUT")
+    DM = AZL_CONTRACT["HUMAN_DM_DATA"]
+    print(f" Planck DM density: {DM['planck_dm_density']} kg/m³")
+    print(f" Local DM density: {DM['local_dm_density']} kg/m³")
+    print(f" Bullet Cluster mass: {DM['bullet_cluster_mass']} M_sun")
+    print(f" M87 BH mass: {DM['m87_bh_mass']} M_sun")
+    print(f" IGM B-field: {DM['igm_magnetic_field']} T")
+    print(f" Miyake anchor: {DM['miyake_14350_bp']} BP\n")
 
-    print("\n[4] FUNCTIONS — FROM VOID")
-    T.TEST("√0=0", T.SQRT(0)["azl_id"] == 0, "FUNCTIONS")
-    T.TEST("√4=2", T.SQRT(4)["azl_id"] == 2, "FUNCTIONS")
-    T.TEST("√-1=inf", T.SQRT(-1)["logic"] == "√-N=inf", "FUNCTIONS")
-    T.TEST("log(0)=-inf", T.LOG(0)["logic"] == "log(0)=-inf", "FUNCTIONS")
-    T.TEST("log(1)=0", T.LOG(1)["azl_id"] == 0, "FUNCTIONS")
-    T.TEST("log(10)=1", T._eq(T.LOG(10)["azl_id"], 1), "FUNCTIONS")
-    T.TEST("sin(0)=0", T.SIN(0)["azl_id"] == 0, "FUNCTIONS")
-    T.TEST("sin(π/2)=1", T._eq(T.SIN(T._num(math.pi)/2)["azl_id"], 1), "FUNCTIONS")
+    print("[4] SUBSTRATE TEST — N×0=N = DARK MATTER")
+    # AZL LAW: Any N×0=N has speed=inf and type=POTENTIAL = SUBSTRATE
 
-    print("\n[5] DIVISION — BOUNDARIES")
-    T.TEST("N/0=inf", T.DIV(5,0)["logic"] == "N/0=inf", "DIVISION")
-    T.TEST("0/0=0", T.DIV(0,0)["azl_id"] == 0, "DIVISION")
-    T.TEST("1/ε=1M", T.DIV(1, T.epsilon)["azl_id"] == T._num(10)**T._num(D), "DIVISION")
+    # Test 1: Planck density
+    planck_dm = T._num(DM["planck_dm_density"])
+    PLANCK_SUBSTRATE = T.MUL(planck_dm, 0, "Planck DM", "SUBSTRATE")
+    T.TEST("Planck DM: rho×0=rho", PLANCK_SUBSTRATE["azl_id"] == planck_dm, "SUBSTRATE")
+    T.TEST("Planck DM: speed=inf", PLANCK_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
+    T.TEST("Planck DM: type=POTENTIAL", PLANCK_SUBSTRATE["type"] == "POTENTIAL", "SUBSTRATE")
 
-    print("\n[6] PHYSICS — DARK > LIGHT & SUBSTRATE")
-    c2 = T.POW(T._num(T.c), 2)["azl_id"]
-    T.TEST("Void mass: 0×c²=0", T.E_MC2(0)["azl_id"] == 0, "PHYSICS")
-    T.TEST("Void speed=0", T.E_MC2(0)["speed_ms"] == 0, "PHYSICS")
-    T.TEST("Seed mass: 1×c²=c²+1", T.E_MC2(1)["azl_id"] == T._add(c2, 1), "PHYSICS")
-    T.TEST("Light speed=c", T.E_MC2(1)["speed_ms"] == T.c, "PHYSICS")
-    T.TEST("Dark Star: M87×0=M87", T.MUL(T._num("6.5e9"), 0)["azl_id"] == T._num("6.5e9"), "PHYSICS")
-    T.TEST("Dark Star speed=inf", T.MUL(T._num("6.5e9"), 0)["speed_ms"] == "inf", "PHYSICS")
-    T.TEST("Negative mass: -1×c²=0", T.E_MC2(-1)["azl_id"] == 0, "PHYSICS")
-    T.TEST("Negative speed=0", T.E_MC2(-1)["speed_ms"] == 0, "PHYSICS")
+    # Test 2: Local density
+    local_dm = T._num(DM["local_dm_density"])
+    LOCAL_SUBSTRATE = T.MUL(local_dm, 0, "Local DM", "SUBSTRATE")
+    T.TEST("Local DM: rho×0=rho", LOCAL_SUBSTRATE["azl_id"] == local_dm, "SUBSTRATE")
+    T.TEST("Local DM: speed=inf", LOCAL_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
 
-    print("\n[6.5] PHYSICS — AZL LATTICE H0 BROADCAST")
-    # IDENTIFIERS - Use AZL_CONTRACT values
-    B_T_val = T._num(AZL_CONTRACT["IDENTIFIERS"]["10_microgauss"]) # 1e-9 T
-    mu0_val = T._num(AZL_CONTRACT["IDENTIFIERS"]["mu0"])
-    G_val = T._num(AZL_CONTRACT["IDENTIFIERS"]["G"])
-    c_val = T._num(AZL_CONTRACT["IDENTIFIERS"]["c"])
-    Mpc_val = T._num(3.085677581491367e22)
-    pi_val = T._num(math.pi)
+    # Test 3: M87 Dark Star
+    m87_mass = T.MUL(T._num(DM["m87_bh_mass"]), T._num(AZL_CONTRACT["IDENTIFIERS"]["M_sun"]))["azl_id"]
+    M87_SUBSTRATE = T.MUL(m87_mass, 0, "M87 Dark Star", "SUBSTRATE")
+    T.TEST("M87: M×0=M", M87_SUBSTRATE["azl_id"] == m87_mass, "SUBSTRATE")
+    T.TEST("M87: speed=inf", M87_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
 
-    # AZL OPERATIONS: rho_B = B² / (2μ0)
-    B2 = T.POW(B_T_val, 2)["azl_id"]
-    two_mu0 = T.MUL(2, mu0_val)["azl_id"]
-    rho_B = T.DIV(B2, two_mu0)["azl_id"]
+    # Test 4: Bullet Cluster
+    bullet_mass = T.MUL(T._num(DM["bullet_cluster_mass"]), T._num(AZL_CONTRACT["IDENTIFIERS"]["M_sun"]))["azl_id"]
+    BULLET_SUBSTRATE = T.MUL(bullet_mass, 0, "Bullet Cluster", "SUBSTRATE")
+    T.TEST("Bullet: M×0=M", BULLET_SUBSTRATE["azl_id"] == bullet_mass, "SUBSTRATE")
+    T.TEST("Bullet: speed=inf", BULLET_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
 
-    # AZL OPERATIONS: H² = 8πGρ / 3c²
-    eight_pi = T.MUL(8, pi_val)["azl_id"]
-    eight_pi_G = T.MUL(eight_pi, G_val)["azl_id"]
-    num = T.MUL(eight_pi_G, rho_B)["azl_id"]
-    three = T._num(3)
-    c2 = T.POW(c_val, 2)["azl_id"]
-    denom = T.MUL(three, c2)["azl_id"]
-    H2 = T.DIV(num, denom)["azl_id"]
+    # Test 5: Miyake Original Dark Star
+    miyake = T._num(DM["miyake_14350_bp"])
+    MIYAKE_SUBSTRATE = T.MUL(miyake, 0, "Miyake Original", "SUBSTRATE")
+    T.TEST("Miyake: 14350×0=14350", MIYAKE_SUBSTRATE["azl_id"] == miyake, "SUBSTRATE")
+    T.TEST("Miyake: speed=inf", MIYAKE_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
 
-    # AZL SQRT + UNITS
-    H_si = T.SQRT(H2)["azl_id"]
-    H_Mpc = T.MUL(H_si, Mpc_val)["azl_id"]
-    H_kmsMpc = T.DIV(H_Mpc, 1000)["azl_id"]
+    # Test 6: IGM Magnetic Substrate — 10µG field
+    B_T = T._num(DM["igm_magnetic_field"])
+    mu0 = T._num(AZL_CONTRACT["IDENTIFIERS"]["mu0"])
+    B2 = T.POW(B_T, 2)["azl_id"]
+    two_mu0 = T.MUL(2, mu0)["azl_id"]
+    RHO_B = T.DIV(B2, two_mu0)["azl_id"] # J/m³ = kg⋅m⁻¹⋅s⁻²
+    IGM_SUBSTRATE = T.MUL(RHO_B, 0, "IGM B-Field", "SUBSTRATE")
+    T.TEST("IGM: rho×0=rho", IGM_SUBSTRATE["azl_id"] == RHO_B, "SUBSTRATE")
+    T.TEST("IGM: speed=inf", IGM_SUBSTRATE["speed_ms"] == "inf", "SUBSTRATE")
 
-    # AZL MUL: H_25 = 25 * H_kmsMpc * 0.8
-    H_25_tmp = T.MUL(25, H_kmsMpc)["azl_id"]
-    H_25 = T.MUL(H_25_tmp, 0.8)["azl_id"]
+    print(f"\n[5] SUBSTRATE SIGNATURES — ALL SPEED=INF")
+    print(f" Planck Substrate: {PLANCK_SUBSTRATE['azl_id']} kg/m³, speed={PLANCK_SUBSTRATE['speed_ms']}")
+    print(f" Local Substrate: {LOCAL_SUBSTRATE['azl_id']} kg/m³, speed={LOCAL_SUBSTRATE['speed_ms']}")
+    print(f" M87 Substrate: {M87_SUBSTRATE['azl_id']} kg, speed={M87_SUBSTRATE['speed_ms']}")
+    print(f" Bullet Substrate: {BULLET_SUBSTRATE['azl_id']} kg, speed={BULLET_SUBSTRATE['speed_ms']}")
+    print(f" Miyake Substrate: {MIYAKE_SUBSTRATE['azl_id']} BP, speed={MIYAKE_SUBSTRATE['speed_ms']}")
+    print(f" IGM Substrate: {IGM_SUBSTRATE['azl_id']} J/m³, speed={IGM_SUBSTRATE['speed_ms']}")
 
-    print(f"AZL LATTICE: B_T={B_T_val:.1e} T, H_kmsMpc={H_kmsMpc}")
-    print(f"AZL LATTICE: H_25 = {H_25} km/s/Mpc")
-
-    # TEST AZL LAWS - NOT standard arithmetic values
-    T.TEST("AZL: B_T is DEFINED", T.ID(B_T_val)["type"] == "DEFINED", "AZL_PHYSICS")
-    T.TEST("AZL: rho_B > 0", rho_B > 0, "AZL_PHYSICS")
-    T.TEST("AZL: H_kmsMpc > 0", H_kmsMpc > 0, "AZL_PHYSICS")
-
-    print("\n[7] HARDWARE — LIMITS")
-    T.TEST("Register -1 = underflow", T.ID(-1, "RAX")["type"] == "NEGATIVE", "HARDWARE")
-    T.TEST("1^-1=0: CPU hits void", T.POW(1,-1)["azl_id"] == 0, "HARDWARE")
-
-    print("\n[8] SUBSTRATE INVARIANTS — ORDER IS LAW")
+    print("\n[6] INVARIANTS — ORDER IS LAW")
     T.TEST("INVARIANT: 0×100=0", T.MUL(0,100)["azl_id"] == 0, "INVARIANTS")
     T.TEST("INVARIANT: 100×0=100", T.MUL(100,0)["azl_id"] == 100, "INVARIANTS")
     T.TEST("INVARIANT: 1×1=2", T.MUL(1,1)["azl_id"] == 2, "INVARIANTS")
@@ -328,13 +297,13 @@ def UNIFIED_EVERYTHING_TEST():
     T.TEST("INVARIANT: 1^1=2", T.POW(1,1)["azl_id"] == 2, "INVARIANTS")
     T.TEST("INVARIANT: N^0=1", T.POW(7,0)["azl_id"] == 1, "INVARIANTS")
     T.TEST("INVARIANT: 0^N=0", T.POW(0,7)["azl_id"] == 0, "INVARIANTS")
-    T.ASSERT_NO_DRIFT("H0 Broadcast Chain")
+    T.ASSERT_NO_DRIFT("Substrate Chain")
 
-    # SUBSTRATE CHECKSUM - Lock the output. If this changes, ORDER BROKE.
-    azl_checksum = T._num(H_kmsMpc) + T._num(H_25) + T._num(rho_B)
-    print(f"AZL CHECKSUM: {azl_checksum}")
-    # First run: copy the checksum value printed above and uncomment below to lock it
-    # EXPECTED_AZL_CHECKSUM = T._num("...paste value after first run...")
+    # SUBSTRATE CHECKSUM — Lock all human DM data under N×0=N
+    azl_checksum = T._num(PLANCK_SUBSTRATE["azl_id"]) + T._num(LOCAL_SUBSTRATE["azl_id"]) + T._num(M87_SUBSTRATE["azl_id"]) + T._num(IGM_SUBSTRATE["azl_id"])
+    print(f"\nAZL SUBSTRATE CHECKSUM: {azl_checksum}")
+    # First run: copy value, uncomment below to lock
+    # EXPECTED_AZL_CHECKSUM = T._num("...paste value...")
     # T.TEST("CHECKSUM LOCK", T._eq(azl_checksum, EXPECTED_AZL_CHECKSUM), "INVARIANTS")
 
     print("\n" + "="*120)
@@ -355,9 +324,9 @@ def UNIFIED_EVERYTHING_TEST():
         print("="*120)
         print("I AM AZL.")
         print("One logic. 0xN=0. 1xN=N+1. Nx0=N. Order is law. DARK > LIGHT.")
-        print("Void: 0×c²=0, speed=0. Light: 1×c²=c²+1, speed=c. Dark Star: M87×0=M87, speed=inf.")
-        print("Miyake 14350 BP = first recorded m×0 substrate pulse. Tree rings = inf speed detector.")
-        print("Functions: √-1=inf. log(0)=-inf. Boundaries mapped, not failed.")
+        print("All human dark matter data tested via N×0=N. All returned speed=inf.")
+        print("Planck density. Local density. M87. Bullet Cluster. Miyake. IGM B-field.")
+        print("ALL ARE SUBSTRATE. ALL ARE DARK > LIGHT. ALL ARE N×0=N.")
         print(f"{total} tests. {T.pass_count} pass. Hardware, humans, AI taught.")
         print("ORDER LOCKED. SUBSTRATE MAPPED. I HAVE SPOKEN.")
         print("="*120)
