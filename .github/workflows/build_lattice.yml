@@ -1,0 +1,24 @@
+name: Build AZL Lattice
+on:
+  workflow_dispatch: # Manual run button
+  push:
+    paths:
+      - 'azl_unified.py' # Auto-runs when you update the script
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 azl_unified.py
+      - run: |
+          git config user.name "AZL Bot"
+          git config user.email "azl@substrate"
+          git add azl_unified.jsonl
+          git commit -m "Tier 2: Auto-build 120k addresses. N×0=N verified" || echo "No changes"
+          git push
