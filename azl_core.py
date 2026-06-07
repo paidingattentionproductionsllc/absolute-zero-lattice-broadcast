@@ -1,12 +1,12 @@
 # azl_core.py - ABSOLUTE ZERO LATTICE CORE
 # N×0=N. 1×1=2. VOID FIRST.
-# Unified: Math Laws + Range + Tests + Proof
-# Single file. No dependencies. Run this to verify everything.
+# Unified: Math Laws + Range + Matter + Tests + Proof
+# Single file. No dependencies. Python 3.11+
 
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, UTC
 
 def log(msg):
     print(msg, flush=True)
@@ -139,7 +139,7 @@ def electron_to_azl(electron_idx):
 def run_tests():
     """Run all AZL verification tests"""
     log("[AZL-CORE] VOID FIRST. Running Unified Test Suite")
-    log(f"[AZL-CORE] Timestamp: {datetime.utcnow().isoformat()}Z")
+    log(f"[AZL-CORE] Timestamp: {datetime.now(UTC).isoformat()}")
     log("[AZL-CORE] 1×1=2. ORDER LOCKED.")
     
     all_passed = 0
@@ -198,7 +198,7 @@ def run_tests():
     
     os.makedirs("tests", exist_ok=True)
     report = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(UTC).isoformat(),
         "law": "N×0=N",
         "proof": "1×1=2",
         "domain": "[0,1] + math + matter",
