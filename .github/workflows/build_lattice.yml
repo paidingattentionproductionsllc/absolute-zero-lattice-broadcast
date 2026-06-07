@@ -19,13 +19,13 @@ jobs:
         with:
           python-version: '3.11'
           
-      - name: Build AZL TIER 1-7 Zipped
+      - name: Build AZL [0,1] Lattice
         run: python azl_unified.py
         
-      - name: Commit zipped batches + manifest
+      - name: Commit Zipped Batches + Manifest
         run: |
           git config --global user.name 'azl-bot'
           git config --global user.email 'azl@n0n.io'
           git add shards/azl_batch_*.zip azl_manifest.json
-          git commit -m "AZL TIER 1-7: 1B addresses in 40 batches [N×0=N]" || echo "No changes"
+          git commit -m "AZL TIER 1-7: Absolute Zero→One [0,1] in 40 batches [N×0=N]" || echo "No changes"
           git push
