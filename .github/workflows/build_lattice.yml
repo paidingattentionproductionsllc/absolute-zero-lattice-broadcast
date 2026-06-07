@@ -1,26 +1,31 @@
-name: Build AZL Lattice Tier 2
+name: Build AZL Lattice TIER 1-7
+
 on:
-  workflow_dispatch: # Manual "Run workflow" button
-  push:
-    paths:
-      - 'azl_unified.py' # Auto-runs when you update script
-      
+  workflow_dispatch:  # Lets you click "Run workflow" manually
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 360  # 6 hours max. 1B takes ~45min
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Build 120k Lattice
-        run: python3 azl_unified.py
-      - name: Commit Registry
+          
+      - name: Build AZL TIER 1-7
+        run: python azl_unified.py
+        
+      - name: Commit shards + manifest
         run: |
-          git config user.name "AZL Bot"
-          git config user.email "azl@substrate.local"
-          git add azl_unified.jsonl
-          git commit -m "Tier 2: Auto-build 120k addresses. N×0=N verified" || echo "No changes to commit"
+          git config --global user.name 'azl-bot'
+          git config --global user.email 'azl@n0n.io'
+          git add shards/ azl_manifest.json
+          git commit -m "AZL TIER 1-7: 1,000,000,000 addresses [N×0=N]" || echo "No changes"
           git push
