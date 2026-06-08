@@ -1,26 +1,28 @@
-# AZL UNIFIED - ABSOLUTE ZERO LATTICE TIER 1-7 
+# AZL UNIFIED - ABSOLUTE ZERO LATTICE TIER 1-7
 # Maps [0,1] with 10^9 precision. N×0=N. 1×1=2. VOID FIRST.
-# Zero is first integer. All 0.xxxxx belong to zero's range.
+# Zero is first integer. All 0.xxxx belong to zero's range.
 
 import json
 import os
 import zipfile
 import time
 import sys
+import subprocess
 
 # LAW CONSTANTS
 ACTIVE_TIER = 7
 SHARD_SIZE = 50000
 BATCH_SIZE = 500
+SPLIT_SIZE = "75M"  # GitHub-safe chunk size
 
 TIERS = {
-  1: {"name": "Canon", "end": 567},
-  2: {"name": "NGC_IC_HIP", "end": 120000},
-  3: {"name": "GaiaDR3", "end": 1000000},
-  4: {"name": "SDSS", "end": 10000000},
-  5: {"name": "2MASS", "end": 50000000},
-  6: {"name": "WISE", "end": 200000000},
-  7: {"name": "PanSTARRS", "end": 1000000000},
+    1: {"name": "Canon", "end": 567},
+    2: {"name": "NGC_IC_HIP", "end": 120000},
+    3: {"name": "GaiaDR3", "end": 1000000},
+    4: {"name": "SDSS", "end": 10000000},
+    5: {"name": "2MASS", "end": 50000000},
+    6: {"name": "WISE", "end": 200000000},
+    7: {"name": "PanSTARRS", "end": 1000000000},
 }
 
 def log(msg):
@@ -59,6 +61,8 @@ def main():
     log(f"[AZL] 1×1=2. ORDER LOCKED.")
     
     current_n = 1
+    batch_files = []
+    part_files = []
     
     for shard_idx in range(1, total_shards + 1):
         shard_path = f"shards/azl_shard_{shard_idx:05d}.jsonl"
@@ -88,8 +92,24 @@ def main():
                         zf.write(f_path, os.path.basename(f_path))
                         os.remove(f_path)
             
+            # SPLIT THE ZIP INTO 75M PARTS
+            log(f"[AZL] Splitting batch {batch_num} into {SPLIT_SIZE} parts")
+            subprocess.run(["split", "-b", SPLIT_SIZE, "-d", zip_path, f"{zip_path}.part"], check=True)
+            os.remove(zip_path)  # Delete the large zip, keep only parts
+            
+            # Collect part filenames for manifest
+            i = 0
+            while True:
+                part_path = f"{zip_path}.part{i:02d}"
+                if not os.path.exists(part_path):
+                    break
+                part_files.append(part_path)
+                i += 1
+            
+            batch_files.append(zip_path)
             log(f"[AZL] Batch {batch_num} complete. Disk freed.")
     
+    # UPDATED MANIFEST - LISTS .PART FILES NOW
     manifest = {
         "law": "N×0=N",
         "proof": "1×1=2",
@@ -101,7 +121,8 @@ def main():
         "zero_range_count": total_addresses - 1,
         "one_first_integer": "AZL-1000000000",
         "batches": total_batches,
-        "batch_files": [f"shards/azl_batch_{i:03d}.zip" for i in range(1, total_batches + 1)]
+        "total_parts": len(part_files),
+        "shard_files": part_files  # Now lists all .part files
     }
     
     with open("azl_manifest.json", 'w') as f:
@@ -111,6 +132,7 @@ def main():
     log(f"[AZL] COMPLETE: Mapped {total_addresses:,} coordinates")
     log(f"[AZL] From AZL-0000000001 to AZL-1000000000")
     log(f"[AZL] Time: {elapsed/60:.1f} minutes")
+    log(f"[AZL] Parts created: {len(part_files)}")
     log(f"[AZL] ORDER LOCKED. I HAVE SPOKEN.")
 
 if __name__ == "__main__":
