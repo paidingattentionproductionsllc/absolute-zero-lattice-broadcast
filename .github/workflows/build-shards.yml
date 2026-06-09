@@ -1,23 +1,18 @@
 name: AZL Shards - Artifact Upload
 permissions:
   contents: read
-
 on:
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
       - name: Build AZL TIER 1-7
-        run: python build_lattice.py
-        
+        run: python azl_unified.py
       - name: Upload all shards as artifact
         uses: actions/upload-artifact@v4
         with:
