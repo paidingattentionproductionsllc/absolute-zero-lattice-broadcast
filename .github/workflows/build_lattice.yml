@@ -1,4 +1,4 @@
-name: Build AZL Lattice TIER 1-7
+name: AZL Lattice TIER 1-7
 
 on:
   workflow_dispatch:
