@@ -95,7 +95,7 @@ def main():
             # SPLIT THE ZIP INTO 75M PARTS
             log(f"[AZL] Splitting batch {batch_num} into {SPLIT_SIZE} parts")
             subprocess.run(["split", "-b", SPLIT_SIZE, "-d", zip_path, f"{zip_path}.part"], check=True)
-            os.remove(zip_path)  # Delete the large zip, keep only parts
+            os.remove(zip_path) 
             
             # Collect part filenames for manifest
             i = 0
