@@ -90,3 +90,12 @@ CC-BY-4.0 - Cite azl_manifest.json when using AZL addresses or laws.
 ---
 Tier 7: Expansion to 10B addresses in progress
 null
+   ## Cite This Work
+   ```bibtex
+   @misc{azl2026,
+     title = {Absolute Zero Lattice: Substrate Physics via N×0=N},
+     author = {PaidingAttention Productions LLC},
+     year = {2026},
+     howpublished = {\url{https://github.com/paidingattentionproductionsllc/absolute-zero-lattice-broadcast}},
+     note = {Miyake 14350 BP verified by CI}
+   }
