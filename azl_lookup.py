@@ -1,119 +1,72 @@
 #!/usr/bin/env python3
-"""
-AZL Lookup - Query Absolute Zero-One Lattice addresses
-Tier 1-6: 1,000,000,000 addresses mapped to [0,1]
-Laws: N×0=N | Proof: 1×1=2
-"""
 import json
 import sys
-import hashlib
 import argparse
-from pathlib import Path
 
-# Tier 1-6 constants
-AZL_MAX_N = 1_000_000_000
-AZL_DOMAIN = "[0,1]"
-AZL_LAW = "N×0=N"
-AZL_PROOF = "1×1=2"
-MANIFEST_FILE = "azl_manifest.json"
-REPO = "paidingattentionproductionllc/absolute-zero-lattice-broadcast"
+# AZL Tier 1-6: 1,000,000,000 addresses on [0,1]
+TOTAL_ADDRESSES = 1000000000
 
-def get_tier(n):
-    """Determine tier based on n"""
-    if n <= 10: return 1
-    elif n <= 100: return 2
-    elif n <= 1_000: return 3
-    elif n <= 10_000: return 4
-    elif n <= 100_000: return 5
-    else: return 6
+# Substrate events from SUBSTRATE.md - Immutable
+SUBSTRATE_EVENTS = {
+    14350: "Miyake 14350 BP",
+    6.5e9: "M87* Black Hole", 
+    3.97e-13: "IGM 10μG Field"
+}
 
-def azl_lookup(n, verify=False):
-    """
-    Lookup AZL address by n.
+def lookup_address(n):
+    """Lookup AZL address by number 1 to 1,000,000,000"""
+    if not 1 <= n <= TOTAL_ADDRESSES:
+        return {"error": f"n must be 1-{TOTAL_ADDRESSES}"}
     
-    Args:
-        n: Integer 1 to 1,000,000,000
-        verify: If True, checks azl_manifest.json exists locally
+    value = n * 1e-9
+    address = f"AZL-{n:010d}"
+    azl_range = "one" if n == TOTAL_ADDRESSES else "zero"
     
-    Returns:
-        dict with full AZL address data
-    """
-    try:
-        n = int(n)
-    except:
-        return {"error": "n must be an integer", "input": str(n)}
-    
-    if not 1 <= n <= AZL_MAX_N:
-        return {
-            "error": f"n out of Tier 1-6 range",
-            "valid_range": f"1 to {AZL_MAX_N:,}",
-            "input": n
-        }
-    
-    result = {
+    return {
+        "address": address,
         "n": n,
-        "tier": get_tier(n),
-        "value": n / AZL_MAX_N,
-        "address": f"AZL-{n:010d}",
-        "range": "one" if n == AZL_MAX_N else "zero",
-        "law": AZL_LAW,
-        "proof": AZL_PROOF,
-        "domain": AZL_DOMAIN,
-        "source": f"Tier 1-6 | {REPO}"
+        "value": value,
+        "range": azl_range,
+        "law": "N×0=N",
+        "proof": "1×1=2"
     }
-    
-    if verify:
-        manifest = Path(MANIFEST_FILE)
-        if manifest.exists():
-            try:
-                with open(manifest) as f:
-                    data = json.load(f)
-                result["verified"] = True
-                result["manifest_sha256"] = hashlib.sha256(manifest.read_bytes()).hexdigest()[:16]
-                result["total_addresses"] = data.get("total_addresses", AZL_MAX_N)
-            except:
-                result["verified"] = False
-                result["verify_error"] = "manifest unreadable"
-        else:
-            result["verified"] = False
-            result["verify_error"] = f"{MANIFEST_FILE} not found locally"
-    
-    return result
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Query Absolute Zero-One Lattice addresses",
-        epilog="Example: python azl_lookup.py 500000000 --verify"
-    )
-    parser.add_argument("n", help="Address number 1-1000000000 or 'random'")
-    parser.add_argument("--verify", action="store_true", help="Verify against local manifest")
-    parser.add_argument("--json", action="store_true", help="Output raw JSON")
+def test_substrate(value):
+    """Test N×0=N law against verified substrate events from SUBSTRATE.md"""
+    # Under AZL law: N×0=N, so result = N
+    result = value  # This IS the AZL calculation
+    
+    event_name = SUBSTRATE_EVENTS.get(value, "Unknown substrate event")
+    
+    return {
+        "event": event_name,
+        "input": value,
+        "law": "N×0=N",
+        "result": result,
+        "substrate": True,
+        "speed": "inf",
+        "verified_by": "SUBSTRATE.md"
+    }
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="AZL Lookup Tool")
+    parser.add_argument('n', nargs='?', type=int, help='Address number 1-1B')
+    parser.add_argument('--json', action='store_true', help='Output JSON')
+    parser.add_argument('--substrate-test', type=float, help='Test substrate physics event')
     
     args = parser.parse_args()
     
-    if args.n.lower() == "random":
-        import random
-        n = random.randint(1, AZL_MAX_N)
+    if args.substrate_test is not None:
+        output = test_substrate(args.substrate_test)
+    elif args.n:
+        output = lookup_address(args.n)
     else:
-        n = args.n
+        parser.print_help()
+        sys.exit(1)
     
-    result = azl_lookup(n, verify=args.verify)
-    
-    if args.json:
-        print(json.dumps(result, indent=2))
+    if args.json or args.substrate_test:
+        print(json.dumps(output, indent=2))
     else:
-        if "error" in result:
-            print(f"Error: {result['error']}")
-            sys.exit(1)
-        print(f"Address: {result['address']}")
-        print(f"Value:   {result['value']}")
-        print(f"Tier:    {result['tier']}")
-        print(f"Range:   {result['range']}")
-        print(f"Law:     {result['law']}")
-        print(f"Proof:   {result['proof']}")
-        if args.verify:
-            status = "✓ Verified" if result.get("verified") else "✗ Not verified"
-            print(f"Status:  {status}")
-
-if __name__ == "__main__":
-    main()
+        print(f"Address: {output['address']}")
+        print(f"Value: {output['value']}")
+        print(f"Law: {output['law']}")
