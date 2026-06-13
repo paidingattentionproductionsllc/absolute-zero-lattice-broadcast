@@ -104,6 +104,19 @@ License
 CC-BY-4.0 - Cite azl_manifest.json when using AZL addresses or laws.
 
 ---
+ 
+Build & Run
+ - Create a virtualenv and install dependencies:
+   - `./scripts/setup_venv.sh`
+ - Run tests / verifier:
+   - `python main.py`
+ - Lookup example:
+   - `python azl_lookup.py 847293847 --json`
+ - Build Docker image:
+   - `docker build -t azl:latest .`
+ - Run in Docker:
+   - `docker run --rm azl:latest`
+
 Tier 7: Expansion to 10B addresses in progress
 null
    ## Cite This Work
