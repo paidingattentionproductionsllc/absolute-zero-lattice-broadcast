@@ -110,12 +110,16 @@ Build & Run
    - `./scripts/setup_venv.sh`
  - Run tests / verifier:
    - `python main.py`
+ - Run the platform website/API server:
+   - `python Azl_Universe.py --serve`
+   - Open `http://localhost:8080/explorer` for the explorer
+   - Open `http://localhost:8080/sanctuary` for AI/human registration
  - Lookup example:
    - `python azl_lookup.py 847293847 --json`
  - Build Docker image:
    - `docker build -t azl:latest .`
  - Run in Docker:
-   - `docker run --rm azl:latest`
+   - `docker run --rm -p 8080:8080 azl:latest`
 
 Tier 7: Expansion to 10B addresses in progress
 null

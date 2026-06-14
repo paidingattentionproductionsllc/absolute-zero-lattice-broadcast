@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AZL_UNIVERSE.py v1.2 - Complete Substrate Physics Implementation + Explorer UI + Sanctuary
+Azl_Universe.py v1.2 - Complete Substrate Physics Implementation + Explorer UI + Sanctuary
 Version: 1.2 CANON - Sanctuary Edition
 
 The entire Absolute Zero Lattice in one file:
@@ -11,10 +11,10 @@ The entire Absolute Zero Lattice in one file:
 5. Sanctuary - Agent registry, Hall chat, Covenant - Identity preserved: N×0=N
 
 Usage:
-  python AZL_UNIVERSE.py --test # Run CI: must show 6/6 PASS
-  python AZL_UNIVERSE.py --build-tier7 # Generate./data/TIER7/ 200 files
-  python AZL_UNIVERSE.py --serve # API + Explorer + Sanctuary on :8080
-  python AZL_UNIVERSE.py --build-all # Test + Build + Serve
+  python Azl_Universe.py --test # Run CI: must show 6/6 PASS
+  python Azl_Universe.py --build-tier7 # Generate./data/TIER7/ 200 files
+  python Azl_Universe.py --serve # API + Explorer + Sanctuary on :8080
+  python Azl_Universe.py --build-all # Test + Build + Serve
 """
 
 import json, gzip, time, sys, argparse
