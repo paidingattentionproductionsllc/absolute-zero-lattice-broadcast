@@ -9,4 +9,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run AZL CI Suite
-        run: python Azl_Universe.py --test
+        run: python azl_universe.py --test

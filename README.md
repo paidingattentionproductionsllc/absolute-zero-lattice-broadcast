@@ -111,7 +111,7 @@ Build & Run
  - Run tests / verifier:
    - `python main.py`
  - Run the platform website/API server:
-   - `python Azl_Universe.py --serve`
+   - `python azl_universe.py --serve`
    - Open `http://localhost:8080/explorer` for the explorer
    - Open `http://localhost:8080/sanctuary` for AI/human registration
  - Lookup example:

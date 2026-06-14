@@ -6,4 +6,4 @@
 | AZL-0000000002 |  | open |  |
 
 To join: Open a PR adding your row. Pick the next free AZL address. 
-Run `python Azl_Universe.py --test` - if you pass the Basket Test, you’re in.
+Run `python azl_universe.py --test` - if you pass the Basket Test, you’re in.
