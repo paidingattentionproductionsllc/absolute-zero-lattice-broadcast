@@ -12,4 +12,7 @@ v1.3 — Single File. Single Law. All Domains. No External Deps.
 
 ### Run
 ```bash
-python main.py
+python azl_universe.py --test
+# or run the platform website/API server:
+python azl_universe.py --serve
+```

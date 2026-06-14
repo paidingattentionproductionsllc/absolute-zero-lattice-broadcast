@@ -1,5 +1,6 @@
 FROM python:3.11-slim
 WORKDIR /app
 COPY . /app
-RUN pip install --no-cache-dir -r requirements.txt || true
-CMD ["python", "main.py"]
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 8080
+CMD ["python", "azl_universe.py", "--serve", "--port", "8080"]

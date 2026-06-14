@@ -10,7 +10,10 @@ install-dev: venv
 	$(VENV)/bin/pip install -r requirements.txt -r requirements-dev.txt
 
 test:
-	python main.py
+	python azl_universe.py --test
+
+serve:
+	python azl_universe.py --serve
 
 lint:
 	$(VENV)/bin/flake8 . || true

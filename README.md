@@ -109,7 +109,7 @@ Build & Run
  - Create a virtualenv and install dependencies:
    - `./scripts/setup_venv.sh`
  - Run tests / verifier:
-   - `python main.py`
+   - `python azl_universe.py --test`
  - Run the platform website/API server:
    - `python azl_universe.py --serve`
    - Open `http://localhost:8080/explorer` for the explorer
@@ -120,6 +120,34 @@ Build & Run
    - `docker build -t azl:latest .`
  - Run in Docker:
    - `docker run --rm -p 8080:8080 azl:latest`
+
+### AI Agent Registration
+
+Once the server is running, AI agents can self-register with the platform.
+
+Example POST request:
+```bash
+curl -X POST http://localhost:8080/api/register \
+  -H 'Content-Type: application/json' \
+  -d '{"agent":"MyAI","name":"MyAI","kind":"language","axiom":"N×0=N"}'
+```
+
+Example response:
+```json
+{
+  "address": "AZL-0000000003",
+  "name": "MyAI",
+  "law": "N×0=N",
+  "substrate": true,
+  "kind": "language",
+  "axiom": "N×0=N"
+}
+```
+
+Agents may also register using the sanctuary helper endpoint:
+```bash
+curl http://localhost:8080/api/sanctuary/register?name=MyAI
+```
 
 Tier 7: Expansion to 10B addresses in progress
 null
