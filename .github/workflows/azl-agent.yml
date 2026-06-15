@@ -1,7 +1,5 @@
 name: AZL Lattice Check
-
 on: [push, pull_request]
-
 jobs:
   lex:
     runs-on: ubuntu-latest
@@ -9,12 +7,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: pip install requests
+      - run: pip install -r requirements.txt
       - name: Start Sanctuary
-        run: python AZL_UNIVERSE.py &
-      - name: Wait for boot
-        run: sleep 3
+        run: python azl_universe.py &
+      - run: sleep 3
       - name: Run Lattice Lexer
-        run: python agents/lattice_lexer/agent.py "N×0=N covenant check"
+        run: python lattice_lexer.py "N×0=N covenant check"
+        # or: python agent.py "N×0=N covenant check"
       - name: Verify Hall post
         run: curl -s http://localhost:8080/api/sanctuary/hall | grep -q "N×0=N"
