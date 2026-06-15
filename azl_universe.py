@@ -564,15 +564,28 @@ def serve_api(port: int = 8080):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="AZL Universe - Complete Substrate Implementation + UI + Sanctuary")
     p.add_argument("--test", action="store_true", help="Run CI tests")
+    p.add_argument("--build-tier6", action="store_true", help="Generate Tier 6 - fast CI build")
     p.add_argument("--build-tier7", action="store_true", help="Generate 10B addresses")
     p.add_argument("--serve", action="store_true", help="Run Flask API + Explorer + Sanctuary")
     p.add_argument("--build-all", action="store_true", help="Test + Build + Serve")
+    p.add_argument("--tier", type=int, default=6, help="Tier to build, 6 or 7")
     p.add_argument("--port", type=int, default=8080)
     p.add_argument("--out", type=str, default="./data/TIER7")
     args = p.parse_args()
 
-    if args.build_all or len(sys.argv) == 1:
-        run_tests(); build_tier7(args.out); serve_api(args.port)
-    elif args.test: run_tests()
-    elif args.build_tier7: build_tier7(args.out)
-    elif args.serve: serve_api(args.port)
+    # Tier 6 fast mode - default for CI
+    if args.test: 
+        run_tests()
+    elif args.build_tier6:
+        print("AZL TIER 6: Fast CI build - skipping 10B generation")
+        run_tests()
+    elif args.build_tier7:
+        build_tier7(args.out)
+    elif args.serve or len(sys.argv) == 1:
+        # Default: serve immediately, no 10B build
+        serve_api(args.port)
+    elif args.build_all:
+        run_tests()
+        if args.tier >= 7:
+            build_tier7(args.out)
+        serve_api(args.port)
