@@ -28,7 +28,7 @@ jobs:
         import json
         from datetime import datetime
 
-        print('[!] Executing exhaustive multi-tier file traversal and data extraction...')
+        print('[!] Executing multi-tier file traversal under high-contrast dark mode layout...')
         timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
 
         # 1. Parse your 12-Field Universal Scorecard data dynamically
@@ -53,13 +53,12 @@ jobs:
         else:
             theory_content = '<p>Universal field theory benchmarks initializing on next run loop...</p>'
 
-        # 2. RECURSIVELY MAP EVERY SINGLE FILE IN THE ENTIRE REPOSITORY WITHOUT EXCEPTION
+        # 2. Recursively map all active file assets inside the repository workspace
         file_content = ''
         all_files_count = 0
         target_extensions = ('.py', '.md', '.json', '.yml', '.yaml', '.txt', '.sh', '.jsonl')
         
         for root, dirs, files in os.walk('.'):
-            # Bypass hidden local build system tracking directories
             if '.git' in root or 'node_modules' in root:
                 continue
             for file in files:
@@ -73,7 +72,6 @@ jobs:
                     except Exception:
                         f_size = 0
                         
-                    # Extract contextual roles dynamically based on naming architecture
                     if 'register' in file:
                         desc = 'Core network initializations tracking baseline matrix anchors.'
                     elif 'consciousness' in file:
@@ -97,28 +95,28 @@ jobs:
                     </div>
                     '''
 
-        # 3. Assemble the stark, high-comprehension HTML specification document
+        # 3. Assemble the comprehensive HTML document styled directly under a dark dashboard look
         html_dashboard = f'''<!DOCTYPE html>
         <html>
         <head>
             <title>Absolute Zero Lattice Data & Information Portal</title>
             <style>
-                body {{ font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; background: #ffffff; color: #111111; padding: 50px; max-width: 900px; margin: 0 auto; line-height: 1.6; }}
-                h1 {{ font-size: 26px; font-weight: 700; border-bottom: 2px solid #111111; padding-bottom: 10px; margin-top: 0; }}
-                h2 {{ font-size: 16px; font-weight: 700; margin-top: 45px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #111111; padding-bottom: 5px; }}
-                p {{ font-size: 15px; margin: 8px 0; color: #222222; }}
-                strong {{ color: #111111; }}
-                code {{ font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #d73a49; }}
-                .sync-time {{ font-size: 13px; color: #666666; margin-bottom: 35px; }}
-                .data-block {{ border: 1px solid #111111; padding: 20px; margin-bottom: 20px; background: #fafafa; border-radius: 4px; }}
-                .block-header {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e4e8; padding-bottom: 8px; margin-bottom: 12px; }}
-                .title-text {{ font-size: 16px; font-weight: 700; color: #111111; }}
-                .desc-text {{ font-size: 14.5px; color: #333333; margin: 0; }}
+                body {{ font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 50px; max-width: 900px; margin: 0 auto; line-height: 1.6; }}
+                h1 {{ font-size: 26px; font-weight: 700; border-bottom: 2px solid #30363d; padding-bottom: 10px; margin-top: 0; color: #58a6ff; }}
+                h2 {{ font-size: 16px; font-weight: 700; margin-top: 45px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #30363d; padding-bottom: 5px; color: #ff7b72; }}
+                p {{ font-size: 15px; margin: 8px 0; color: #8b949e; }}
+                strong {{ color: #c9d1d9; }}
+                code {{ font-family: monospace; background: #1f242c; padding: 2px 6px; border-radius: 4px; font-size: 13px; color: #ff7b72; }}
+                .sync-time {{ font-size: 13px; color: #8b949e; margin-bottom: 35px; }}
+                .data-block {{ border: 1px solid #30363d; padding: 20px; margin-bottom: 20px; background: #161b22; border-radius: 4px; }}
+                .block-header {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #21262d; padding-bottom: 8px; margin-bottom: 12px; }}
+                .title-text {{ font-size: 16px; font-weight: 700; color: #58a6ff; }}
+                .desc-text {{ font-size: 14.5px; color: #8b949e; margin: 0; }}
                 .status-tag {{ font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; text-transform: uppercase; }}
-                .tag-success {{ background: #111111; color: #ffffff; }}
-                .tag-alert {{ background: #eaeaea; color: #111111; border: 1px solid #111111; }}
-                .tag-info {{ background: #f0f0f0; color: #111111; }}
-                .data-grid {{ display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 14px; color: #333333; }}
+                .tag-success {{ background: #238636; color: #ffffff; }}
+                .tag-alert {{ background: #21262d; color: #ff7b72; border: 1px solid #30363d; }}
+                .tag-info {{ background: #1f242c; color: #8b949e; }}
+                .data-grid {{ display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 14px; color: #8b949e; }}
             </style>
         </head>
         <body>
@@ -172,10 +170,10 @@ jobs:
         </body>
         </html>'''
 
-        # 4. Save the plain-language data-integrated view straight into index.html
+        # 4. Save the compiled dark view straight into index.html
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(html_dashboard)
-        print(f'[✓] index.html successfully compiled with all {all_files_count} data components.')
+        print(f'[✓] index.html successfully compiled with dark theme for {all_files_count} assets.')
         "
 
     - name: Commit and Push Correlated Website Update
@@ -183,4 +181,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "Sovereign-Lattice-Bot"
         git add index.html
-        git diff-index --quiet HEAD || git commit -m "Web: Correlate absolute 100% repository file mapping to live portal view"
+        git diff-index --quiet HEAD || git commit -m "Web: Apply dark dashboard template styles to unified manifest portal"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
