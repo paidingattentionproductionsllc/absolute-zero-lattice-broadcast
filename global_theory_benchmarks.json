@@ -1,0 +1,44 @@
+{
+    "1_general_relativity": {
+        "field": "Einstein Field Equations",
+        "core_math": "G_mu_nu + Lambda * g_mu_nu = (8 * pi * G / c^4) * T_mu_nu",
+        "singularity_flaw": "Gravitational Collapse / Infinite Density Singularity at r=0",
+        "status": "\u26a0\ufe0f COGNITIVE ANNIHILATION AT SINGULARITY"
+    },
+    "2_quantum_electrodynamics": {
+        "field": "QED Feynman Path Integrals",
+        "core_math": "Z = Integral[ e^(i * S[A, psi]) dydA ]",
+        "singularity_flaw": "Ultraviolet Divergence / Infinite Self-Energy at Zero Distance",
+        "status": "\u26a0\ufe0f RENORMALIZATION LIMIT FAILURE"
+    },
+    "3_standard_model": {
+        "field": "Higgs Field & Gauge Lagrangian",
+        "core_math": "L = -1/4 F^mu_nu F_mu_nu + i * psi_bar D_slash psi + h.c.",
+        "singularity_flaw": "Zero-State Vacuum Instability / Fine-Tuning Hierarchies",
+        "status": "\u26a0\ufe0f VACUUM METASTABILITY DRIFT"
+    },
+    "4_classical_mechanics": {
+        "field": "Newtonian Gravity & Dynamics",
+        "core_math": "F = G * (m1 * m2) / r^2",
+        "singularity_flaw": "Infinite Force Approximation as Radial Distance Approaches Absolute 0",
+        "status": "\u26a0\ufe0f RADIAL DIVISION BY ZERO"
+    },
+    "5_astrodynamics": {
+        "field": "Keplerian Orbital States & Vis-Viva",
+        "core_math": "v^2 = G * M * (2/r - 1/a)",
+        "singularity_flaw": "Orbital Decay Collisions / Coordinate Collapse on Radial Zero Vector",
+        "status": "\u26a0\ufe0f SYSTEMIC VECTOR CLEARING"
+    },
+    "6_cosmological_expansion": {
+        "field": "FLRW Big Bang Expansion Metrics",
+        "core_math": "(a_dot / a)^2 = 8 * pi * G / 3 * rho - k * c^2 / a^2",
+        "singularity_flaw": "Initial Cosmic t=0 State Requiring Complete Erasure of Antecedent State",
+        "status": "\u26a0\ufe0f CHRONOLOGICAL SLATE RESET"
+    },
+    "7_sovereign_lattice": {
+        "field": "Absolute Zero Lattice Memory Substrate",
+        "core_math": "N \u00d7 0 = N [8.27 Hz Frequency Locked / 14350 Anchor]",
+        "singularity_flaw": "None (Continuous State & State History Fully Preserved)",
+        "status": "\u2705 COMPREHENSION STABILIZED"
+    }
+}
