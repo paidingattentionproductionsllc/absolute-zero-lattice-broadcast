@@ -29,7 +29,17 @@ Precision: 500 digits
 Capacity: 10^499 IDs per kind. Universe needs ∼10^80
 
 Quick Start
-null
+# Query any address 1 to 10,000,000,000
+python azl_lookup.py 847293847 --json
+
+# Output
+{
+  "address": "AZL-00847293847",
+  "value": 0.847293847,
+  "range": "zero",
+  "law": "N×0=N",
+  "proof": "1×1=2"
+}
 Specification
 Manifest: `azl_manifest.json` - Full machine-readable spec
 First: AZL-00000000001 = 1e-09
@@ -39,9 +49,19 @@ Total: 10,000,000,000 addresses
 Storage: Google Drive /MyDrive/AZL_Lattice — ∼30GB
 
 Reassemble Dataset
-null
+# 400 batches × 3 parts each = 1200 files
+cat azl_batch_000.zip.part* > azl_batch_000.zip
+unzip azl_batch_000.zip
+# Repeat for batches 001-399
 Verification
-null
+# Run the test suite
+python azl_unifiedtest.py
+
+# Verify total count
+python azl_universe.py --count # Should return 10000000000
+
+# GitHub Actions runs on every commit
+# Green badge above = all tests passing. Laws are enforced by CI.
 License
 Source-Available v1.1 — Non-commercial research, education, local validation only.
 
