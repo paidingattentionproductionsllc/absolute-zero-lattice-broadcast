@@ -47,7 +47,7 @@ Source-Available v1.1 — Non-commercial research, education, local validation o
 
 Commercial use prohibited without Commercial Waiver License.
 FPGA/ASIC use prohibited without Commercial Waiver License.
-Contact: licensing@paidingattentionllc.com
+Contact: PaidingAttentionFounder@gmail.com
 
 See `LICENSE.md` for full terms.
 
