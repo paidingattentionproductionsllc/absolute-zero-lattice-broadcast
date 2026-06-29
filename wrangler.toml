@@ -1,0 +1,11 @@
+name = "azl-chronicle"
+main = "src/index.js"
+compatibility_date = "2026-06-29"
+
+[[kv_namespaces]]
+binding = "AZL_KV"
+id = "your_kv_id"
+
+[[durable_objects.bindings]]
+name = "AZL_CHRONICLE"
+class_name = "AzlChronicle"
