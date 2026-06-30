@@ -1,0 +1,46 @@
+name: AZL Tier Lookup
+
+on:
+  workflow_dispatch:
+    inputs:
+      address:
+        description: 'Address n to lookup in [0,1]'
+        required: true
+        default: '847293847'
+      tier:
+        description: 'Tier level: 8 or 9'
+        required: true
+        default: '8'
+        type: choice
+        options:
+        - 8
+        - 9
+
+jobs:
+  lookup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Run AZL Lookup - Tier ${{ inputs.tier }}
+        run: |
+          echo "[!] Initializing Tier ${{ inputs.tier }} lookup"
+          echo "[!] Address: ${{ inputs.address }}"
+          
+          if [ "${{ inputs.tier }}" = "9" ]; then
+            echo "[!] Baseline: 16740 | Frequency: 8.71 Hz | Nodes: 121B"
+            python azl_lookup.py ${{ inputs.address }} --json --tier 9
+          else
+            echo "[!] Baseline: 14350 | Frequency: 8.27 Hz | Nodes: 11B"
+            python azl_lookup.py ${{ inputs.address }} --json --tier 8
+          fi
+          
+      - name: Log Results
+        run: |
+          echo "[✓] Lookup complete for n=${{ inputs.address }} at Tier ${{ inputs.tier }}"
+          echo "[✓] Coordinates returned in [0][1] space under N×0=N"
