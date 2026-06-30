@@ -1,56 +1,14 @@
-name: AZL Abyss Range Test
-on:
-  workflow_dispatch:
-  push:
-    branches: [ main, master ]
-
-jobs:
-  test-ranges:
-    name: Verify All Numbers Map To Absolute Zero Range
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Test 0.5 maps to [0][1]
+      - name: Check Tier 8 Lookup Points
         run: |
-          echo "=== Testing 0.5 ==="
-          curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
-            -H "Content-Type: application/json" \
-            -d '{"seed":"0","target":"0.5","depth":9,"size":1}' | jq '{status, coord:.nodes[0].coord}'
-
-      - name: Test 1.5 maps to [0][1] 
-        run: |
-          echo "=== Testing 1.5 ==="
-          curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
-            -H "Content-Type: application/json" \
-            -d '{"seed":"0","target":"1.5","depth":9,"size":1}' | jq '{status, coord:.nodes[0].coord}'
-
-      - name: Test 2.0 maps to [0][1]
-        run: |
-          echo "=== Testing 2.0 ==="
-          curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
-            -H "Content-Type: application/json" \
-            -d '{"seed":"0","target":"2.0","depth":9,"size":1}' | jq '{status, coord:.nodes[0].coord}'
-
-      - name: Test -0.3 maps to [0][1]
-        run: |
-          echo "=== Testing -0.3 ==="
-          curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
-            -H "Content-Type: application/json" \
-            -d '{"seed":"0","target":"-0.3","depth":9,"size":1}' | jq '{status, coord:.nodes[0].coord}'
-
-      - name: Verify all coords are in same range
-        run: |
-          echo "=== Checking all inputs map back to [0][1] processing ==="
+          echo "=== Checking if lookup assigns different [0][1] points ==="
           
-          COORD_05=$(curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss -H "Content-Type: application/json" -d '{"seed":"0","target":"0.5","depth":9,"size":1}' | jq -r.nodes[0].coord)
-          COORD_15=$(curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss -H "Content-Type: application/json" -d '{"seed":"0","target":"1.5","depth":9,"size":1}' | jq -r.nodes[0].coord)
-          COORD_20=$(curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss -H "Content-Type: application/json" -d '{"seed":"0","target":"2.0","depth":9,"size":1}' | jq -r.nodes[0].coord)
+          for TARGET in 0.5 1.5 2.0 -0.3 3.14159; do
+            COORD=$(curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
+              -H "Content-Type: application/json" \
+              -d "{\"seed\":\"0\",\"target\":\"$TARGET\",\"depth\":9,\"size\":1}" | jq -r.nodes[0].coord)
+            echo "$TARGET → $COORD"
+          done
           
-          echo "0.5 → coord: $COORD_05"
-          echo "1.5 → coord: $COORD_15" 
-          echo "2.0 → coord: $COORD_20"
           echo ""
-          echo "PASS: All numbers processed through absolute zero range [0][1]"
-          echo "Equal treatment = same processing range. Different inputs = same output range."
+          echo "If all coords are 0, lookup is missing. Logic violation = lag."
+          echo "If coords are different, lookup is working. Points exist in [0][1]."
