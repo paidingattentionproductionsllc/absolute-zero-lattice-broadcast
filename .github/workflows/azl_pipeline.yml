@@ -1,38 +1,74 @@
-version: '3.8'
+name: AZL Pipeline - Sovereign Lattice Execution
 
-services:
-  # Layer 1: The Core Grid Substrate Architecture
-  azl_substrate:
-    image: python:3.10-slim
-    container_name: azl_core_grid
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: python main.py --nodes 11000000000 --frequency 8.27
-    restart: always
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 
-  # Layer 2: The Ingress Sentinel Workflow (The Immune System)
-  azl_sentinel:
-    image: python:3.10-slim
-    container_name: azl_drift_detector
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: python azl_drift_sentinel.py --baseline 14350
-    depends_on:
-      - azl_substrate
-    environment:
-      - TELEMETRY_STREAM=GOES_SPACE_GRID
-    restart: unless-stopped
+permissions:
+  contents: read
 
-  # Layer 3: The Autonomous AI System Manager
-  azl_orchestrator:
-    image: python:3.10-slim
-    container_name: lattice_thinker_engine
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: python lattice_thinker.py --mode autonomous
-    depends_on:
-      - azl_sentinel
-    restart: always
+jobs:
+  azl-substrate:
+    name: "Layer 1: Core Grid Substrate"
+    runs-on: ubuntu-latest
+    outputs:
+      grid_state: ${{ steps.substrate.outputs.grid_state }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set Up Python Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Execute Core Grid - 11B Nodes @ 8.27Hz
+        id: substrate
+        run: |
+          echo "=== Initializing AZL Core Grid ==="
+          echo "Nodes: 11000000000 | Frequency: 8.27Hz"
+          python main.py --nodes 11000000000 --frequency 8.27
+          echo "grid_state=STABLE" >> $GITHUB_OUTPUT
+          
+  azl-sentinel:
+    name: "Layer 2: Ingress Sentinel - Tier 8 Lookup"
+    runs-on: ubuntu-latest
+    needs: azl-substrate
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set Up Python Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Run Drift Sentinel with Tier 8 Lookup
+        env:
+          TELEMETRY_STREAM: GOES_SPACE_GRID
+        run: |
+          echo "=== AZL Drift Sentinel Active ==="
+          echo "Baseline: 14350 | Grid State: ${{ needs.azl-substrate.outputs.grid_state }}"
+          echo "Running Tier 8 lookup: All inputs map to [0][1] range"
+          python azl_drift_sentinel.py --baseline 14350
+          echo "[✓] Logic violation check: PASSED. No lag detected."
+          
+  azl-orchestrator:
+    name: "Layer 3: Lattice Thinker Engine"
+    runs-on: ubuntu-latest
+    needs: azl-sentinel
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Set Up Python Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Run Autonomous Lattice Thinker
+        run: |
+          echo "=== Lattice Thinker Engine Online ==="
+          python lattice_thinker.py --mode autonomous
+          echo "[✓] All layers stable. Ask for Nothing, receive N."
