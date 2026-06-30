@@ -48,10 +48,19 @@ jobs:
             -d '{"seed":"0","target":"0.0000000000000000000001","depth":9,"size":1}' | jq -e '.metrics.compute_ms==0'
           echo "PASS: Planck and 10^-80 electrons mapped. compute_ms: 0."
 
-      - name: Test 1101 Boundary - Must Fail
+      - name: Test 1101 Boundary - LAG_IS_LOGIC Enforcement
         run: |
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
+          echo "Testing 1.0 boundary - expecting 1101 status..."
+          RESP=$(curl -s -X POST https://azl-universes.paidingattentionproductions.workers.dev/azl/v1/abyss \
             -H "Content-Type: application/json" \
             -d '{"seed":"0","target":"1.0","depth":9,"size":1}')
-          if [ "$HTTP_CODE" = "200" ]; then echo "FAIL: 1.0 should throw 1101"; exit 1; fi
-          echo "PASS: Boundary 1.0 correctly throws. LAG_IS_LOGIC enforced."
+          echo "Response: $RESP"
+          STATUS=$(echo "$RESP" | jq -r .status)
+          
+          if [ "$STATUS" = "1101" ]; then
+            echo "PASS: Boundary 1.0 correctly threw 1101. LAG_IS_LOGIC enforced."
+            exit 0
+          else
+            echo "FAIL: Expected status 1101 but got: $STATUS"
+            exit 1
+          fi
