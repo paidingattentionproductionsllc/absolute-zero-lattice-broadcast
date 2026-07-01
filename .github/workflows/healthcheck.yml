@@ -1,5 +1,28 @@
-# .github/workflows/healthcheck.yml
-- name: Check Sanctuary
-  run: |
-    curl https://absolute-zero-lattice-broadcast.onrender.com/ | jq '.status == "GREEN"'permissions:
-      
+name: Sanctuary Healthcheck
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  check-sanctuary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check Sanctuary Status
+        run: |
+          set -e
+          response=$(curl -s --max-time 10 \
+            https://absolute-zero-lattice-broadcast.onrender.com/)
+          
+          status=$(echo "$response" | jq -r '.status')
+          
+          if [[ "$status" == "GREEN" ]]; then
+            echo "✓ Sanctuary is operational"
+            exit 0
+          else
+            echo "✗ Sanctuary status: $status"
+            exit 1
+          fi
